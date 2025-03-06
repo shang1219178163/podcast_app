@@ -1,0 +1,89 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at https://dart.dev/lints.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+  rules:
+    - always_declare_return_types
+    - avoid_empty_else
+    - avoid_print: false
+    - avoid_unused_constructor_parameters: false
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions: false
+    - constant_identifier_names: false
+    - control_flow_in_finally: false
+    - directives_ordering: false
+    - empty_catches: false
+    - empty_constructor_bodies: false
+    - library_names: false
+    - library_prefixes: false
+    - no_duplicate_case_values: false
+    - prefer_const_constructors: false
+    - prefer_const_declarations: false
+    - prefer_const_literals_to_create_immutables: false
+    - prefer_const_locals: false
+    - prefer_final_fields
+    - prefer_is_empty: false
+    - prefer_is_not_empty: false
+    - prefer_single_quotes: false
+    - sort_child_properties_last
+    - throw_in_finally: false
+    - type_init_formals: false
+    - unawaited_futures
+    - unnecessary_brace_in_string_interps: false
+    - unnecessary_getters_setters: false
+    - unnecessary_new: false
+    - unnecessary_statements: false
+    - unnecessary_this
+    - unrelated_type_equality_checks
+    - valid_regexps
+    - void_checks: false
+    - prefer_const_constructors_in_immutables: false
+    - avoid_unused_parameters: false
+    - avoid_void_async: false
+    - prefer_typing_uninitialized_variables: false
+    - slash_for_doc_comments: false
+    - test_types_in_equals: false
+    - unnecessary_null_checks: false
+    - valid_type_has_instance: false
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  errors:
+    invalid_assignment: warning
+    missing_return: warning
+    dead_code: warning
+  rules:
+    - unknown_word: false
+  language:
+    strict-casts: true
+    strict-raw-types: true
+  spelling:
+    words:
+      - prefs
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
