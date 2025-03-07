@@ -32,6 +32,7 @@ import '../screens/history_page.dart';
 import '../screens/downloads_page.dart';
 import '../screens/messages_page.dart';
 import '../screens/audio_player_page.dart';
+import '../bindings/discover_binding.dart';
 
 part 'app_routes.dart';
 
@@ -41,7 +42,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: AppRoute.login,
-      page: () => LoginPage(),
+      page: () => const LoginPage(),
       binding: BindingsBuilder(() {
         Get.put(LoginController());
       }),
@@ -61,10 +62,7 @@ class AppPages {
     GetPage(
       name: AppRoute.discover,
       page: () => const DiscoverPage(),
-      binding: BindingsBuilder(() {
-        Get.put(CategoryController());
-        Get.put(PodcastController());
-      }),
+      binding: DiscoverBinding(),
     ),
     GetPage(
       name: AppRoute.subscription,

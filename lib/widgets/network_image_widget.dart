@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:extended_image/extended_image.dart';
 
 class NetworkImageWidget extends StatelessWidget {
@@ -16,9 +17,10 @@ class NetworkImageWidget extends StatelessWidget {
   final bool clearMemoryCacheWhenDispose;
   final Border? border;
   final bool isAntiAlias;
+  final double aspectRatio;
 
   const NetworkImageWidget({
-    Key? key,
+    super.key,
     this.url,
     this.width,
     this.height,
@@ -28,82 +30,103 @@ class NetworkImageWidget extends StatelessWidget {
     this.errorWidget,
     this.enableLoadState = true,
     this.enableMemoryCache = true,
-    this.cacheMaxAge,
-    this.clearMemoryCacheIfFailed = true,
-    this.clearMemoryCacheWhenDispose = true,
+    this.cacheMaxAge = const Duration(days: 30),
+    this.clearMemoryCacheIfFailed = false,
+    this.clearMemoryCacheWhenDispose = false,
     this.border,
     this.isAntiAlias = true,
-  }) : super(key: key);
+    this.aspectRatio = 1.0,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (url == null || url!.isEmpty) {
-      return _buildPlaceholder();
+      return _buildPlaceholder(context);
     }
 
-    return ExtendedImage.network(
-      url!,
-      width: width == null ? null : (width! * 3),
-      height: height == null ? null : (height! * 3),
-      fit: fit ?? BoxFit.cover,
-      borderRadius: borderRadius,
-      loadStateChanged: enableLoadState ? _buildLoadState : null,
-      enableMemoryCache: enableMemoryCache,
-      cacheMaxAge: cacheMaxAge,
-      clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
-      clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
-      border: border,
-      isAntiAlias: isAntiAlias,
+    // 计算实际的宽高
+    final double? actualWidth = width;
+    final double? actualHeight = height ?? (actualWidth != null ? actualWidth / aspectRatio : null);
+
+    final name = url?.split('/').last;
+
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: ExtendedImage.network(
+        url!,
+        width: actualWidth,
+        height: actualHeight,
+        fit: fit ?? BoxFit.cover,
+        borderRadius: borderRadius,
+        loadStateChanged: enableLoadState ? (state) => _buildLoadState(context, state) : null,
+        enableMemoryCache: enableMemoryCache,
+        cacheMaxAge: cacheMaxAge,
+        clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+        clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
+        border: border,
+        isAntiAlias: isAntiAlias,
+        cache: true,
+        retries: 3,
+        timeLimit: const Duration(seconds: 15),
+        headers: const {'accept': '*/*'},
+        imageCacheName: "cache_image_$name",
+        cacheWidth: (actualWidth ?? 200).toInt() * 2,
+        compressionRatio: 0.7,
+      ),
     );
   }
 
-  Widget? _buildLoadState(ExtendedImageState state) {
+  Widget? _buildLoadState(BuildContext context, ExtendedImageState state) {
     switch (state.extendedImageLoadState) {
       case LoadState.completed:
         final image = state.extendedImageInfo?.image;
         return ExtendedRawImage(
           image: image,
-          width: width ?? image?.width.toDouble(),
-          height: height ?? image?.height.toDouble(),
-          fit: fit,
+          width: width,
+          height: height ?? (width != null ? width! / aspectRatio : null),
+          fit: fit ?? BoxFit.cover,
         );
+      case LoadState.failed:
+        return _buildErrorWidget(context);
       default:
-        return _buildPlaceholder();
+        return _buildPlaceholder(context);
     }
   }
 
-  Widget _buildPlaceholder() {
+  Widget _buildPlaceholder(BuildContext context) {
     if (placeholder != null) {
       return placeholder!;
     }
 
-    final placeholderImage = Image(
-      image:  AssetImage("assets/images/img_placeholder.png"),
-      width: width,
-      height: height,
-      fit: fit,
-    );
-
-    
-    return Container(
-      width: width,
-      height: height,
-      color: Colors.grey[200],
-      child: placeholderImage,
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Image.asset(
+          'assets/images/img_placeholder.png',
+          width: width,
+          height: height ?? (width != null ? width! / aspectRatio : null),
+          fit: fit ?? BoxFit.cover,
+        ),
+      ),
     );
   }
 
-  Widget _buildErrorWidget() {
+  Widget _buildErrorWidget(BuildContext context) {
     if (errorWidget != null) {
       return errorWidget!;
     }
-    return Container(
-      width: width,
-      height: height,
-      color: Colors.grey[200],
-      child: const Icon(
-        Icons.error_outline,
-        color: Colors.grey,
+
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Image.asset(
+          'assets/images/img_placeholder.png',
+          width: width,
+          height: height ?? (width != null ? width! / aspectRatio : null),
+          fit: fit ?? BoxFit.cover,
+        ),
       ),
     );
   }

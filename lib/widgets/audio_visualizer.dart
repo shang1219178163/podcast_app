@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class AudioVisualizer extends StatefulWidget {
   final List<double> data;

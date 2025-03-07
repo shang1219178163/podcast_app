@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
-import '../controllers/user_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({Key? key}) : super(key: key);
