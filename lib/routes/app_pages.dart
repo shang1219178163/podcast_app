@@ -8,6 +8,7 @@ import '../controllers/podcast_controller.dart';
 import '../controllers/category_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../controllers/subscription_controller.dart';
+import '../controllers/chat_controller.dart';
 
 import '../screens/player_page.dart';
 import '../screens/tab_bar_page.dart';
@@ -32,6 +33,7 @@ import '../screens/history_page.dart';
 import '../screens/downloads_page.dart';
 import '../screens/messages_page.dart';
 import '../screens/audio_player_page.dart';
+import '../screens/chat_page.dart';
 import '../bindings/discover_binding.dart';
 
 part 'app_routes.dart';
@@ -154,6 +156,17 @@ class AppPages {
     GetPage(
       name: AppRoute.audioPlayer,
       page: () => const AudioPlayerPage(),
+    ),
+    GetPage(
+      name: AppRoute.chat,
+      page: () => const ChatPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<ChatController>(() => ChatController(
+              chatId: (Get.arguments?['chatId'] as String?) ?? '',
+              chatTitle: (Get.arguments?['chatTitle'] as String?) ?? '',
+              currentUserId: (Get.arguments?['currentUserId'] as String?) ?? '',
+            ));
+      }),
     ),
   ];
 }

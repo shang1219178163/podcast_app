@@ -25,6 +25,7 @@ abstract class AppRoute {
   static const messages = '/messages';
   static const register = '/register';
   static const audioPlayer = '/audioPlayer';
+  static const chat = '/chat';
 
   static List<String> get values => [
         login,
@@ -50,5 +51,6 @@ abstract class AppRoute {
         downloads,
         messages,
         audioPlayer,
+        chat,
       ];
 }
