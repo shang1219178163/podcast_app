@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import '../widgets/network_image_widget.dart';
 
 class PodcastDetailPage extends StatelessWidget {
   const PodcastDetailPage({super.key});
@@ -30,9 +31,17 @@ class PodcastDetailPage extends StatelessWidget {
       expandedHeight: 200,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(
-          AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+        background: NetworkImageWidget(
+          url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+          width: double.infinity,
+          height: double.infinity,
           fit: BoxFit.cover,
+          errorWidget: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.grey[200],
+            child: const Icon(Icons.image, color: Colors.grey),
+          ),
         ),
       ),
     );
@@ -54,10 +63,19 @@ class PodcastDetailPage extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundImage:
-                    NetworkImage(AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage),
+              ClipOval(
+                child: NetworkImageWidget(
+                  url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                  errorWidget: Container(
+                    width: 32,
+                    height: 32,
+                    color: Colors.grey[200],
+                    child: const Icon(Icons.person, color: Colors.grey, size: 16),
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
               const Text('科技早知道'),

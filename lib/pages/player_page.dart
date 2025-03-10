@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../controllers/audio_player_controller.dart';
 import '../widgets/audio_visualizer.dart';
+import '../widgets/network_image_widget.dart';
 
 class PlayerPage extends GetView<AudioPlayerController> {
   const PlayerPage({super.key});
@@ -71,19 +72,17 @@ class PlayerPage extends GetView<AudioPlayerController> {
                         return ListTile(
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              track['cover']!,
+                            child: NetworkImageWidget(
+                              url: track['cover']!,
                               width: 50,
                               height: 50,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 50,
-                                  height: 50,
-                                  color: Colors.grey[200],
-                                  child: const Icon(Icons.music_note),
-                                );
-                              },
+                              errorWidget: Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.image, color: Colors.grey),
+                              ),
                             ),
                           ),
                           title: Text(
@@ -342,16 +341,17 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: GetX<AudioPlayerController>(
-                        builder: (controller) => Image.network(
-                          controller.currentTrack['cover'] ?? "",
+                        builder: (controller) => NetworkImageWidget(
+                          url: controller.currentTrack['cover'] ?? "",
+                          width: double.infinity,
+                          height: double.infinity,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.music_note,
-                              size: 100,
-                              color: Colors.grey,
-                            );
-                          },
+                          errorWidget: Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.image, color: Colors.grey),
+                          ),
                         ),
                       ),
                     ),

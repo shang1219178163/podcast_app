@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../widgets/network_image_widget.dart';
 
 enum CellAccessoryType {
   none,
@@ -179,19 +180,18 @@ class ListItemWidget extends StatelessWidget {
   Widget _buildLeading() {
     if (imageUrl != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Image.network(
-          imageUrl!,
-          width: imageSize,
-          height: imageSize,
+        borderRadius: BorderRadius.circular(4),
+        child: NetworkImageWidget(
+          url: imageUrl,
+          width: 40,
+          height: 40,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Icon(
-              CupertinoIcons.photo,
-              size: iconSize,
-              color: iconColor ?? CupertinoColors.secondaryLabel,
-            );
-          },
+          errorWidget: Container(
+            width: 40,
+            height: 40,
+            color: Colors.grey[200],
+            child: const Icon(Icons.image, color: Colors.grey),
+          ),
         ),
       );
     } else if (icon != null) {

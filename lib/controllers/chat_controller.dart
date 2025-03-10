@@ -162,7 +162,7 @@ class ChatController extends GetxController {
 
   void copyMessage(ChatMessage message) {
     if (message.type != MessageType.text) return;
-    Clipboard.setData(ClipboardData(text: message.content));
+    Clipboard.setData(ClipboardData(text: message.content ?? ""));
     Get.snackbar('提示', '已复制');
   }
 

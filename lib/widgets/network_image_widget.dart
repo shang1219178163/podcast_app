@@ -11,13 +11,12 @@ class NetworkImageWidget extends StatelessWidget {
   final Widget? placeholder;
   final Widget? errorWidget;
   final bool enableLoadState;
-  final bool enableMemoryCache;
   final Duration? cacheMaxAge;
   final bool clearMemoryCacheIfFailed;
   final bool clearMemoryCacheWhenDispose;
   final Border? border;
   final bool isAntiAlias;
-  final double aspectRatio;
+  final double? aspectRatio;
 
   const NetworkImageWidget({
     super.key,
@@ -29,13 +28,12 @@ class NetworkImageWidget extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.enableLoadState = true,
-    this.enableMemoryCache = true,
     this.cacheMaxAge = const Duration(days: 30),
     this.clearMemoryCacheIfFailed = false,
     this.clearMemoryCacheWhenDispose = false,
     this.border,
     this.isAntiAlias = true,
-    this.aspectRatio = 1.0,
+    this.aspectRatio,
   });
 
   @override
@@ -44,48 +42,41 @@ class NetworkImageWidget extends StatelessWidget {
       return _buildPlaceholder(context);
     }
 
-    // 计算实际的宽高
-    final double? actualWidth = width;
-    final double? actualHeight = height ?? (actualWidth != null ? actualWidth / aspectRatio : null);
-
-    final name = url?.split('/').last;
-
-    return AspectRatio(
-      aspectRatio: aspectRatio,
-      child: ExtendedImage.network(
-        url!,
-        width: actualWidth,
-        height: actualHeight,
-        fit: fit ?? BoxFit.cover,
-        borderRadius: borderRadius,
-        loadStateChanged: enableLoadState ? (state) => _buildLoadState(context, state) : null,
-        enableMemoryCache: enableMemoryCache,
-        cacheMaxAge: cacheMaxAge,
-        clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
-        clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
-        border: border,
-        isAntiAlias: isAntiAlias,
-        cache: true,
-        retries: 3,
-        timeLimit: const Duration(seconds: 15),
-        headers: const {'accept': '*/*'},
-        imageCacheName: "cache_image_$name",
-        cacheWidth: (actualWidth ?? 200).toInt() * 2,
-        compressionRatio: 0.7,
-      ),
+    Widget image = ExtendedImage.network(
+      url!,
+      width: width,
+      height: height,
+      fit: fit ?? BoxFit.cover,
+      borderRadius: borderRadius,
+      loadStateChanged: enableLoadState ? (state) => _buildLoadState(context, state) : null,
+      cacheMaxAge: cacheMaxAge,
+      clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+      clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
+      border: border,
+      isAntiAlias: isAntiAlias,
+      cache: true,
+      retries: 3,
+      timeLimit: const Duration(seconds: 15),
+      headers: const {'accept': '*/*'},
+      imageCacheName: url,
+      compressionRatio: 0.7,
     );
+
+    if (aspectRatio != null) {
+      image = AspectRatio(
+        aspectRatio: aspectRatio!,
+        child: image,
+      );
+    }
+
+    return image;
   }
 
   Widget? _buildLoadState(BuildContext context, ExtendedImageState state) {
     switch (state.extendedImageLoadState) {
       case LoadState.completed:
-        final image = state.extendedImageInfo?.image;
-        return ExtendedRawImage(
-          image: image,
-          width: width,
-          height: height ?? (width != null ? width! / aspectRatio : null),
-          fit: fit ?? BoxFit.cover,
-        );
+        final Widget completedImage = state.completedWidget;
+        return aspectRatio != null ? AspectRatio(aspectRatio: aspectRatio!, child: completedImage) : completedImage;
       case LoadState.failed:
         return _buildErrorWidget(context);
       default:
@@ -95,17 +86,16 @@ class NetworkImageWidget extends StatelessWidget {
 
   Widget _buildPlaceholder(BuildContext context) {
     if (placeholder != null) {
-      return placeholder!;
+      return _wrapWithAspectRatio(placeholder!);
     }
 
-    return AspectRatio(
-      aspectRatio: aspectRatio,
-      child: ClipRRect(
+    return _wrapWithAspectRatio(
+      ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
         child: Image.asset(
           'assets/images/img_placeholder.png',
           width: width,
-          height: height ?? (width != null ? width! / aspectRatio : null),
+          height: height,
           fit: fit ?? BoxFit.cover,
         ),
       ),
@@ -114,20 +104,29 @@ class NetworkImageWidget extends StatelessWidget {
 
   Widget _buildErrorWidget(BuildContext context) {
     if (errorWidget != null) {
-      return errorWidget!;
+      return _wrapWithAspectRatio(errorWidget!);
     }
 
-    return AspectRatio(
-      aspectRatio: aspectRatio,
-      child: ClipRRect(
+    return _wrapWithAspectRatio(
+      ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
         child: Image.asset(
           'assets/images/img_placeholder.png',
           width: width,
-          height: height ?? (width != null ? width! / aspectRatio : null),
+          height: height,
           fit: fit ?? BoxFit.cover,
         ),
       ),
     );
+  }
+
+  Widget _wrapWithAspectRatio(Widget child) {
+    if (aspectRatio != null) {
+      return AspectRatio(
+        aspectRatio: aspectRatio!,
+        child: child,
+      );
+    }
+    return child;
   }
 }

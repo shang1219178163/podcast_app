@@ -1,85 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../constants/app_constants.dart';
+import '../models/podcast.dart';
+import '../widgets/network_image_widget.dart';
+import '../routes/app_pages.dart';
 
 class PodcastCard extends StatelessWidget {
-  const PodcastCard({super.key});
+  final Podcast podcast;
+
+  const PodcastCard({
+    super.key,
+    required this.podcast,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed('/player'),
+      onTap: () {
+        Get.toNamed(
+          AppRoute.podcastDetail,
+          arguments: podcast.toJson(),
+        );
+      },
       child: Container(
+        margin: const EdgeInsets.only(right: 16),
+        width: 160,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
-          child: Stack(
-            children: [
-              Image.network(
-                AppConstants.placeholderImage,
-                fit: BoxFit.cover,
-                height: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: NetworkImageWidget(
+                url: podcast.cover ?? 'https://via.placeholder.com/160',
                 width: double.infinity,
-                errorBuilder: (context, error, stackTrace) {
-                  return const ColoredBox(
-                    color: Colors.grey,
-                    child: Icon(Icons.error),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(child: CircularProgressIndicator());
-                },
+                height: 160,
+                fit: BoxFit.cover,
+                errorWidget: Container(
+                  width: double.infinity,
+                  height: 160,
+                  color: Colors.grey[200],
+                  child: const Icon(Icons.image, color: Colors.grey),
+                ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.7),
-                    ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    podcast.title ?? '未知标题',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ),
-              const Positioned(
-                bottom: 12,
-                left: 12,
-                right: 12,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '科技早知道',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  const SizedBox(height: 4),
+                  Text(
+                    podcast.author ?? '未知作者',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      '每天为你解读科技资讯',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

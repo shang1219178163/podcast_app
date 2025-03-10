@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/podcast.dart';
 import '../controllers/discover_controller.dart';
+import '../widgets/network_image_widget.dart';
 
 class DiscoverSearchWidget extends StatelessWidget {
   final DiscoverController controller;
@@ -80,20 +81,25 @@ class DiscoverSearchWidget extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final podcast = options.elementAt(index);
                   return ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: podcast.cover != null
-                          ? Image.network(
-                              podcast.cover!,
+                    leading: podcast.cover != null
+                        ? NetworkImageWidget(
+                            url: podcast.cover!,
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                            errorWidget: Container(
                               width: 40,
                               height: 40,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.image_not_supported);
-                              },
-                            )
-                          : const Icon(Icons.image_not_supported),
-                    ),
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.image, color: Colors.grey),
+                            ),
+                          )
+                        : Container(
+                            width: 40,
+                            height: 40,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.image, color: Colors.grey),
+                          ),
                     title: Text(
                       podcast.title ?? '未知标题',
                       maxLines: 1,

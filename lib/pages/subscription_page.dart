@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../constants/app_constants.dart';
 import '../routes/app_pages.dart';
+import '../widgets/network_image_widget.dart';
 
 class SubscriptionPage extends StatelessWidget {
   const SubscriptionPage({super.key});
@@ -58,15 +59,17 @@ class SubscriptionCard extends StatelessWidget {
           height: 50,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+            child: NetworkImageWidget(
+              url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+              width: 60,
+              height: 60,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const ColoredBox(
-                  color: Colors.grey,
-                  child: Icon(Icons.error),
-                );
-              },
+              errorWidget: Container(
+                width: 60,
+                height: 60,
+                color: Colors.grey[200],
+                child: const Icon(Icons.image, color: Colors.grey),
+              ),
             ),
           ),
         ),

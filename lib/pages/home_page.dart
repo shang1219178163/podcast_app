@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../constants/app_constants.dart';
 import '../routes/app_pages.dart';
+import '../widgets/network_image_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -140,11 +141,17 @@ class HomePage extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    child: Image.network(
-                      AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
-                      height: 120,
+                    child: NetworkImageWidget(
+                      url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
                       width: double.infinity,
+                      height: 120,
                       fit: BoxFit.cover,
+                      errorWidget: Container(
+                        width: double.infinity,
+                        height: 120,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.image, color: Colors.grey),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -190,11 +197,17 @@ class HomePage extends StatelessWidget {
             ),
             leading: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
-              child: Image.network(
-                AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+              child: NetworkImageWidget(
+                url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
+                errorWidget: Container(
+                  width: 60,
+                  height: 60,
+                  color: Colors.grey[200],
+                  child: const Icon(Icons.image, color: Colors.grey),
+                ),
               ),
             ),
             title: const Text(
@@ -237,11 +250,17 @@ class HomePage extends StatelessWidget {
             ),
             leading: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
-              child: Image.network(
-                AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
+              child: NetworkImageWidget(
+                url: AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage,
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
+                errorWidget: Container(
+                  width: 60,
+                  height: 60,
+                  color: Colors.grey[200],
+                  child: const Icon(Icons.image, color: Colors.grey),
+                ),
               ),
             ),
             title: const Text(

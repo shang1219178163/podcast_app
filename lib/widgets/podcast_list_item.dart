@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/podcast.dart';
+import '../widgets/network_image_widget.dart';
 
 class PodcastListItem extends StatelessWidget {
   final Podcast podcast;
@@ -30,16 +31,24 @@ class PodcastListItem extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: podcast.cover != null
-                    ? Image.network(
-                        podcast.cover!,
-                        width: 80,
-                        height: 80,
+                    ? NetworkImageWidget(
+                        url: podcast.cover!,
+                        width: 60,
+                        height: 60,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildPlaceholder();
-                        },
+                        errorWidget: Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.image, color: Colors.grey),
+                        ),
                       )
-                    : _buildPlaceholder(),
+                    : Container(
+                        width: 60,
+                        height: 60,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.image, color: Colors.grey),
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -125,18 +134,6 @@ class PodcastListItem extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPlaceholder() {
-    return Container(
-      width: 80,
-      height: 80,
-      color: Colors.grey[200],
-      child: const Icon(
-        Icons.image_not_supported,
-        color: Colors.grey,
       ),
     );
   }

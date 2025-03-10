@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import '../controllers/podcast_controller.dart';
+import '../widgets/network_image_widget.dart';
 
 class HistoryPage extends GetView<PodcastController> {
   const HistoryPage({super.key});
@@ -42,11 +43,17 @@ class HistoryPage extends GetView<PodcastController> {
             contentPadding: const EdgeInsets.symmetric(vertical: 8),
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://example.com/cover$index.jpg',
+              child: NetworkImageWidget(
+                url: 'https://example.com/cover$index.jpg',
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
+                errorWidget: Container(
+                  width: 60,
+                  height: 60,
+                  color: Colors.grey[200],
+                  child: const Icon(Icons.image, color: Colors.grey),
+                ),
               ),
             ),
             title: Text(

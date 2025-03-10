@@ -11,14 +11,14 @@ class LogUtil {
   static const String _ansiGreen = '\x1B[32m';
   static const String _ansiYellow = '\x1B[33m';
   static const String _ansiBlue = '\x1B[34m';
-  static const String _ansiGray = '\x1B[37m';
+  // static const String _ansiGray = '\x1B[37m';
 
   // Web 控制台颜色样式
   static const String _webRed = 'color: red';
   static const String _webGreen = 'color: #4CAF50';
   static const String _webYellow = 'color: #FFC107';
   static const String _webBlue = 'color: #2196F3';
-  static const String _webGray = 'color: #9E9E9E';
+  // static const String _webGray = 'color: #9E9E9E';
 
   // 设置是否启用日志
   static void setEnable(bool enable) {

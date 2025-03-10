@@ -50,10 +50,10 @@ class ChatPage extends GetView<ChatController> {
                   final showTime = _shouldShowTime(index);
                   return Column(
                     children: [
-                      if (showTime) _buildTimeStamp(message.timestamp),
+                      if (showTime && message.timestamp != null) _buildTimeStamp(message.timestamp!),
                       ChatMessageItem(
                         message: message,
-                        onTapAvatar: () => controller.onTapAvatar(message.senderId),
+                        onTapAvatar: message.senderId != null ? () => controller.onTapAvatar(message.senderId!) : null,
                         onLongPress: () => _showMessageActions(context, message),
                         onTapMessage: () => controller.onTapMessage(message),
                       ),
@@ -80,7 +80,12 @@ class ChatPage extends GetView<ChatController> {
     if (index == controller.messages.length - 1) return true;
     final currentMsg = controller.messages[index];
     final previousMsg = controller.messages[index + 1];
-    return currentMsg.timestamp.difference(previousMsg.timestamp).inMinutes > 5;
+
+    if (currentMsg.timestamp == null || previousMsg.timestamp == null) {
+      return false;
+    }
+
+    return currentMsg.timestamp!.difference(previousMsg.timestamp!).inMinutes > 5;
   }
 
   Widget _buildTimeStamp(DateTime time) {
@@ -191,7 +196,7 @@ class ChatPage extends GetView<ChatController> {
               controller.startMultiSelect(message);
             },
           ),
-          if (message.type == MessageType.text)
+          if (message.type == MessageType.text && message.content != null)
             ListTile(
               leading: const Icon(Icons.font_download),
               title: const Text('文本朗读'),

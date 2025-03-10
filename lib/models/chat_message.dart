@@ -10,25 +10,25 @@ enum MessageType {
 
 class ChatMessage {
   final String id;
-  final String content;
-  final String senderId;
-  final String senderName;
-  final String senderAvatar;
-  final DateTime timestamp;
-  final MessageType type;
-  final bool isRead;
+  final String? content;
+  final String? senderId;
+  final String? senderName;
+  final String? senderAvatar;
+  final DateTime? timestamp;
+  final MessageType? type;
+  final bool? isRead;
   final ChatMessage? replyTo;
   final Map<String, dynamic>? extra;
 
   const ChatMessage({
     required this.id,
-    required this.content,
-    required this.senderId,
-    required this.senderName,
-    required this.senderAvatar,
-    required this.timestamp,
-    required this.type,
-    this.isRead = false,
+    this.content,
+    this.senderId,
+    this.senderName,
+    this.senderAvatar,
+    this.timestamp,
+    this.type,
+    this.isRead,
     this.replyTo,
     this.extra,
   });
@@ -36,15 +36,18 @@ class ChatMessage {
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
       id: json['id'] as String,
-      content: json['content'] as String,
-      senderId: json['senderId'] as String,
-      senderName: json['senderName'] as String,
-      senderAvatar: json['senderAvatar'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      type: MessageType.values.firstWhere(
-        (e) => e.toString() == 'MessageType.${json['type']}',
-      ),
-      isRead: json['isRead'] as bool? ?? false,
+      content: json['content'] as String?,
+      senderId: json['senderId'] as String?,
+      senderName: json['senderName'] as String?,
+      senderAvatar: json['senderAvatar'] as String?,
+      timestamp: json['timestamp'] != null ? DateTime.parse(json['timestamp'] as String) : null,
+      type: json['type'] != null
+          ? MessageType.values.firstWhere(
+              (e) => e.toString() == 'MessageType.${json['type']}',
+              orElse: () => MessageType.text,
+            )
+          : null,
+      isRead: json['isRead'] as bool?,
       replyTo: json['replyTo'] != null ? ChatMessage.fromJson(json['replyTo'] as Map<String, dynamic>) : null,
       extra: json['extra'] as Map<String, dynamic>?,
     );
@@ -53,15 +56,15 @@ class ChatMessage {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'content': content,
-      'senderId': senderId,
-      'senderName': senderName,
-      'senderAvatar': senderAvatar,
-      'timestamp': timestamp.toIso8601String(),
-      'type': type.toString().split('.').last,
-      'isRead': isRead,
-      'replyTo': replyTo?.toJson(),
-      'extra': extra,
+      if (content != null) 'content': content,
+      if (senderId != null) 'senderId': senderId,
+      if (senderName != null) 'senderName': senderName,
+      if (senderAvatar != null) 'senderAvatar': senderAvatar,
+      if (timestamp != null) 'timestamp': timestamp!.toIso8601String(),
+      if (type != null) 'type': type.toString().split('.').last,
+      if (isRead != null) 'isRead': isRead,
+      if (replyTo != null) 'replyTo': replyTo!.toJson(),
+      if (extra != null) 'extra': extra,
     };
   }
 
