@@ -13,7 +13,7 @@ class ChatPage extends GetView<ChatController> {
     return Scaffold(
       backgroundColor: const Color(0xFFEDEDED),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2C),
+        // backgroundColor: const Color(0xFF2C2C2C),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -53,6 +53,7 @@ class ChatPage extends GetView<ChatController> {
                       if (showTime && message.timestamp != null) _buildTimeStamp(message.timestamp!),
                       ChatMessageItem(
                         message: message,
+                        debugInfo: 'senderId: ${message.senderId ?? "null"}',
                         onTapAvatar: message.senderId != null ? () => controller.onTapAvatar(message.senderId!) : null,
                         onLongPress: () => _showMessageActions(context, message),
                         onTapMessage: () => controller.onTapMessage(message),

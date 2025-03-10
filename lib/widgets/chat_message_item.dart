@@ -4,6 +4,7 @@ import '../widgets/network_image_widget.dart';
 
 class ChatMessageItem extends StatelessWidget {
   final ChatMessage message;
+  final String debugInfo;
   final VoidCallback? onTapAvatar;
   final VoidCallback? onLongPress;
   final VoidCallback? onTapMessage;
@@ -11,6 +12,7 @@ class ChatMessageItem extends StatelessWidget {
   const ChatMessageItem({
     super.key,
     required this.message,
+    this.debugInfo = "",
     this.onTapAvatar,
     this.onLongPress,
     this.onTapMessage,
@@ -18,7 +20,8 @@ class ChatMessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSentByMe = message.senderId == 'currentUserId'; // TODO: 从控制器获取 currentUserId
+    final isSentByMe = message.senderId == 'currentUserId' 
+      || message.senderId?.isNotEmpty != true;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -76,7 +79,23 @@ class ChatMessageItem extends StatelessWidget {
                       color: isSentByMe ? const Color(0xFF95EC69) : Colors.white,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: _buildMessageContent(),
+                    child: _buildMessageBody(),
+                  ),
+                ),
+                // 调试信息
+                if(debugInfo.isNotEmpty)Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: Text(
+                    debugInfo,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
               ],
@@ -114,7 +133,10 @@ class ChatMessageItem extends StatelessWidget {
     if (message.content == null) {
       return const Text('消息内容为空');
     }
+    return _buildMessageBody();
+  }
 
+  Widget _buildMessageBody() {
     switch (message.type) {
       case MessageType.text:
         return Text(

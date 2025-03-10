@@ -5,7 +5,6 @@ import 'package:podcast_app/utils/store_manager.dart';
 import 'routes/app_pages.dart';
 import 'bindings/initial_binding.dart';
 import 'package:podcast_app/theme/app_theme.dart';
-import 'package:podcast_app/utils/log_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
