@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/chat_message.dart';
 import '../widgets/network_image_widget.dart';
+import 'message_action_menu/index.dart';
 
 class ChatMessageItem extends StatelessWidget {
   final ChatMessage message;
@@ -8,6 +9,14 @@ class ChatMessageItem extends StatelessWidget {
   final VoidCallback? onTapAvatar;
   final VoidCallback? onLongPress;
   final VoidCallback? onTapMessage;
+  final Function(ChatMessage)? onCopy;
+  final Function(ChatMessage)? onForward;
+  final Function(ChatMessage)? onReply;
+  final Function(ChatMessage)? onMultiSelect;
+  final Function(ChatMessage)? onEdit;
+  final Function(ChatMessage)? onDelete;
+  final Function(ChatMessage)? onRead;
+  final Function(ChatMessage)? onMore;
 
   const ChatMessageItem({
     super.key,
@@ -16,12 +25,38 @@ class ChatMessageItem extends StatelessWidget {
     this.onTapAvatar,
     this.onLongPress,
     this.onTapMessage,
+    this.onCopy,
+    this.onForward,
+    this.onReply,
+    this.onMultiSelect,
+    this.onEdit,
+    this.onDelete,
+    this.onRead,
+    this.onMore,
   });
+
+  void _showMessageMenu(BuildContext context, TapDownDetails details) {
+    final isSentByMe = message.senderId?.isNotEmpty != true;
+
+    MessageActionMenu.show(
+      context: context,
+      message: message,
+      position: details.globalPosition,
+      isSentByMe: isSentByMe,
+      onCopy: () => onCopy?.call(message),
+      onForward: () => onForward?.call(message),
+      onReply: () => onReply?.call(message),
+      onMultiSelect: () => onMultiSelect?.call(message),
+      onEdit: () => onEdit?.call(message),
+      onDelete: () => onDelete?.call(message),
+      onRead: () => onRead?.call(message),
+      onMore: () => onMore?.call(message),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isSentByMe = message.senderId == 'currentUserId' 
-      || message.senderId?.isNotEmpty != true;
+    final isSentByMe = message.senderId?.isNotEmpty != true;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -71,6 +106,7 @@ class ChatMessageItem extends StatelessWidget {
                   const SizedBox(height: 4),
                 ],
                 GestureDetector(
+                  onTapDown: (details) => _showMessageMenu(context, details),
                   onLongPress: onLongPress,
                   onTap: onTapMessage,
                   child: Container(
@@ -83,21 +119,22 @@ class ChatMessageItem extends StatelessWidget {
                   ),
                 ),
                 // 调试信息
-                if(debugInfo.isNotEmpty)Container(
-                  margin: const EdgeInsets.only(top: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  child: Text(
-                    debugInfo,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.blue,
+                if (debugInfo.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    child: Text(
+                      debugInfo,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

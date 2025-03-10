@@ -55,8 +55,19 @@ class ChatPage extends GetView<ChatController> {
                         message: message,
                         debugInfo: 'senderId: ${message.senderId ?? "null"}',
                         onTapAvatar: message.senderId != null ? () => controller.onTapAvatar(message.senderId!) : null,
-                        onLongPress: () => _showMessageActions(context, message),
                         onTapMessage: () => controller.onTapMessage(message),
+                        onCopy: controller.copyMessage,
+                        onForward: (message) => controller.startMultiSelect(message),
+                        onReply: controller.replyMessage,
+                        onMultiSelect: controller.startMultiSelect,
+                        onEdit: (message) {
+                          // TODO: 实现编辑功能
+                        },
+                        onDelete: controller.deleteMessage,
+                        onRead: controller.readMessage,
+                        onMore: (message) {
+                          // TODO: 显示更多选项
+                        },
                       ),
                     ],
                   );
@@ -159,53 +170,178 @@ class ChatPage extends GetView<ChatController> {
 
   void _showMessageActions(BuildContext context, ChatMessage message) {
     final isSentByMe = message.senderId == controller.currentUserId;
+    final isTextMessage = message.type == MessageType.text;
+    final isImageMessage = message.type == MessageType.image;
+
     showModalBottomSheet(
       context: context,
-      builder: (context) => Column(
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.only(bottom: 8),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 顶部灰条
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+
+              // 操作按钮网格
+              GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 4,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                children: [
+                  if (isTextMessage) ...[
+                    _buildActionItem(
+                      icon: Icons.copy,
+                      label: '复制',
+                      onTap: () {
+                        Get.back();
+                        controller.copyMessage(message);
+                      },
+                    ),
+                  ],
+                  if (isTextMessage || isImageMessage) ...[
+                    _buildActionItem(
+                      icon: Icons.forward,
+                      label: '转发',
+                      onTap: () {
+                        Get.back();
+                        controller.startMultiSelect(message);
+                      },
+                    ),
+                  ],
+                  _buildActionItem(
+                    icon: Icons.reply,
+                    label: '引用',
+                    onTap: () {
+                      Get.back();
+                      controller.replyMessage(message);
+                    },
+                  ),
+                  _buildActionItem(
+                    icon: Icons.select_all,
+                    label: '多选',
+                    onTap: () {
+                      Get.back();
+                      controller.startMultiSelect(message);
+                    },
+                  ),
+                  if (isTextMessage) ...[
+                    _buildActionItem(
+                      icon: Icons.edit,
+                      label: '编辑',
+                      onTap: () {
+                        Get.back();
+                        // TODO: 实现编辑功能
+                      },
+                    ),
+                  ],
+                  if (isSentByMe) ...[
+                    _buildActionItem(
+                      icon: Icons.delete_outline,
+                      label: '删除',
+                      onTap: () {
+                        Get.back();
+                        controller.deleteMessage(message);
+                      },
+                    ),
+                  ],
+                  if (isTextMessage) ...[
+                    _buildActionItem(
+                      icon: Icons.font_download,
+                      label: '朗读',
+                      onTap: () {
+                        Get.back();
+                        controller.readMessage(message);
+                      },
+                    ),
+                  ],
+                  _buildActionItem(
+                    icon: Icons.info_outline,
+                    label: '更多',
+                    onTap: () {
+                      Get.back();
+                      // TODO: 显示更多选项
+                    },
+                  ),
+                ],
+              ),
+
+              // 取消按钮
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: TextButton(
+                  onPressed: () => Get.back(),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            leading: const Icon(Icons.copy),
-            title: const Text('复制'),
-            onTap: () {
-              Get.back();
-              controller.copyMessage(message);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.reply),
-            title: const Text('回复'),
-            onTap: () {
-              Get.back();
-              controller.replyMessage(message);
-            },
-          ),
-          if (isSentByMe)
-            ListTile(
-              leading: const Icon(Icons.delete_outline),
-              title: const Text('删除'),
-              onTap: () {
-                Get.back();
-                controller.deleteMessage(message);
-              },
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
             ),
-          ListTile(
-            leading: const Icon(Icons.select_all),
-            title: const Text('多选'),
-            onTap: () {
-              Get.back();
-              controller.startMultiSelect(message);
-            },
-          ),
-          if (message.type == MessageType.text && message.content != null)
-            ListTile(
-              leading: const Icon(Icons.font_download),
-              title: const Text('文本朗读'),
-              onTap: () {
-                Get.back();
-                controller.readMessage(message);
-              },
+            child: Icon(
+              icon,
+              size: 28,
+              color: Colors.black87,
             ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );

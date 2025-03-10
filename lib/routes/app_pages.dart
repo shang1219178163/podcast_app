@@ -34,12 +34,13 @@ import '../pages/downloads_page.dart';
 import '../pages/messages_page.dart';
 import '../pages/audio_player_page.dart';
 import '../pages/chat_page.dart';
+import '../pages/test_page.dart';
 import '../bindings/discover_binding.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
-  static const initial = AppRoute.login;
+  static const initial = AppRoute.home;
 
   static final routes = [
     GetPage(
@@ -167,6 +168,11 @@ class AppPages {
               currentUserId: (Get.arguments?['currentUserId'] as String?) ?? '',
             ));
       }),
+    ),
+    GetPage(
+      name: AppRoute.test,
+      page: () => const TestPage(),
+      binding: null,
     ),
   ];
 }

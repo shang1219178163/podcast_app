@@ -1,5 +1,6 @@
 part of 'app_pages.dart';
 
+
 abstract class AppRoute {
   static const login = '/login';
   static const tabBar = '/tabBar';
@@ -26,6 +27,7 @@ abstract class AppRoute {
   static const register = '/register';
   static const audioPlayer = '/audioPlayer';
   static const chat = '/chat';
+  static const test = '/test';
 
   static List<String> get values => [
         login,
@@ -52,5 +54,14 @@ abstract class AppRoute {
         messages,
         audioPlayer,
         chat,
+        test,
       ];
+
+  static final routes = [
+    GetPage(
+      name: test,
+      page: () => const TestPage(),
+      binding: null,
+    ),
+  ];
 }
