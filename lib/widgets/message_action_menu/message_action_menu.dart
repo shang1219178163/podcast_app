@@ -125,10 +125,29 @@ class MessageActionMenu {
       dx = screenSize.width - menuWidth - 8;
     }
 
+    // 计算菜单高度
+    const numOfRow = 4;
+    const spacing = 12.0;
+    const runSpacing = 12.0;
+
+    const aPadding = EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 16,
+    );
+
+    final itemWidth = (menuWidth - aPadding.left - aPadding.right - spacing * (numOfRow - 1)) / numOfRow;
+    final itemHeight = itemWidth * 1.2; // 估算每个项目的高度
+    final rowCount = (items.length / numOfRow).ceil();
+    final menuHeight = aPadding.top + aPadding.bottom + (itemHeight + runSpacing) *     rowCount - runSpacing;
+
     // 垂直方向边界处理
-    final topSpace = position.dy - menuOffset;
+    final topSpace = position.dy - menuOffset - menuHeight;
     if (topSpace < padding.top + 8) {
+      // 上方空间不足，显示在下方
       dy = position.dy + menuOffset;
+    } else {
+      // 上方空间足够，显示在上方
+      dy = position.dy - menuOffset - menuHeight;
     }
 
     _overlayEntry = OverlayEntry(
@@ -164,7 +183,7 @@ class MessageActionMenu {
                 color: Colors.transparent,
                 child: Container(
                   width: menuWidth,
-                  padding: const EdgeInsets.all(16),
+                  padding: aPadding,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -176,20 +195,20 @@ class MessageActionMenu {
                       ),
                     ],
                   ),
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.85,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    children: items,
-                  ).toBorder(color: Colors.red),
+                  child: Wrap(
+                    spacing: spacing, // 水平间距
+                    runSpacing: runSpacing, // 垂直间距
+                    children: items.map((item) {
+                      return SizedBox(
+                        width: itemWidth,
+                        child: item,
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ),
           ),
-        
         ],
       ),
     );

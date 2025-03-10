@@ -29,31 +29,29 @@ class ActionItem extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Container(
-              width: 48,
-              decoration: BoxDecoration(
-                color: backgroundColor ?? Colors.grey[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                size: iconSize,
-                color: iconColor ?? Colors.black87,
-              ),
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: backgroundColor ?? Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              size: iconSize,
+              color: iconColor ?? Colors.black87,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: fontSize,
-                color: textColor ?? Colors.black87,
-              ),
-              textAlign: TextAlign.center,
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: fontSize,
+              color: textColor ?? Colors.black87,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
