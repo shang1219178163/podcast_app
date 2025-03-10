@@ -98,9 +98,23 @@ class DiscoverPage extends GetView<DiscoverController> {
           return ListItemWidget(
             title: title,
             subtitle: route,
-            icon: Icons.route,
+            icon: const Icon(Icons.route),
+            titleRight: Text(
+              '示例',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            subtitleRight: Text(
+              '路由',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[400],
+              ),
+            ),
             onTap: () => controller.onRouteSelected(route),
-            accessoryType: CellAccessoryType.none,
+            accessoryType: CellAccessoryType.disclosureIndicator,
           );
         },
       ),

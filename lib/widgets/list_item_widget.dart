@@ -1,11 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+enum CellAccessoryType {
+  none,
+  disclosureIndicator,
+  checkmark,
+}
+
 class ListItemWidget extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String? imageUrl;
-  final IconData? icon;
+  final Widget? icon;
+  final Widget? titleRight;
+  final Widget? subtitleRight;
   final VoidCallback? onTap;
   final Widget? trailing;
   final double? imageSize;
@@ -29,6 +37,8 @@ class ListItemWidget extends StatelessWidget {
     this.subtitle,
     this.imageUrl,
     this.icon,
+    this.titleRight,
+    this.subtitleRight,
     this.onTap,
     this.trailing,
     this.imageSize = 48,
@@ -70,27 +80,47 @@ class ListItemWidget extends StatelessWidget {
             mainAxisAlignment: fixedHeight ? MainAxisAlignment.center : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: titleStyle ??
-                    TextStyle(
-                      fontSize: 17,
-                      color: isDark ? CupertinoColors.white : CupertinoColors.black,
-                      fontWeight: FontWeight.w400,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: titleStyle ??
+                          TextStyle(
+                            fontSize: 17,
+                            color: isDark ? CupertinoColors.white : CupertinoColors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                  ),
+                  if (titleRight != null) ...[
+                    const SizedBox(width: 8),
+                    titleRight!,
+                  ],
+                ],
               ),
               if (subtitle != null) ...[
                 const SizedBox(height: 2),
-                Text(
-                  subtitle!,
-                  style: subtitleStyle ??
-                      TextStyle(
-                        fontSize: 15,
-                        color: CupertinoColors.secondaryLabel.resolveFrom(context),
-                        height: 1.2,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        subtitle!,
+                        style: subtitleStyle ??
+                            TextStyle(
+                              fontSize: 15,
+                              color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                              height: 1.2,
+                            ),
                       ),
+                    ),
+                    if (subtitleRight != null) ...[
+                      const SizedBox(width: 8),
+                      subtitleRight!,
+                    ],
+                  ],
                 ),
               ],
             ],
@@ -165,11 +195,7 @@ class ListItemWidget extends StatelessWidget {
         ),
       );
     } else if (icon != null) {
-      return Icon(
-        icon,
-        size: iconSize,
-        color: iconColor ?? CupertinoColors.secondaryLabel,
-      );
+      return icon!;
     }
     return const SizedBox.shrink();
   }
@@ -196,10 +222,4 @@ class ListItemWidget extends StatelessWidget {
       },
     );
   }
-}
-
-enum CellAccessoryType {
-  none,
-  disclosureIndicator,
-  checkmark,
 }
