@@ -56,16 +56,16 @@ class ChatPage extends GetView<ChatController> {
                         debugInfo: 'senderId: ${message.senderId ?? "null"}',
                         onTapAvatar: message.senderId != null ? () => controller.onTapAvatar(message.senderId!) : null,
                         onTapMessage: () => controller.onTapMessage(message),
-                        onCopy: controller.copyMessage,
-                        onForward: (message) => controller.startMultiSelect(message),
-                        onReply: controller.replyMessage,
-                        onMultiSelect: controller.startMultiSelect,
-                        onEdit: (message) {
+                        onCopy: () => controller.copyMessage(message),
+                        onForward: () => controller.startMultiSelect(message),
+                        onReply: () => controller.replyMessage(message),
+                        onMultiSelect: () => controller.startMultiSelect(message),
+                        onEdit: () {
                           // TODO: 实现编辑功能
                         },
-                        onDelete: controller.deleteMessage,
-                        onRead: controller.readMessage,
-                        onMore: (message) {
+                        onDelete: () => controller.deleteMessage(message),
+                        onRead: () => controller.readMessage(message),
+                        onMore: () {
                           // TODO: 显示更多选项
                         },
                       ),

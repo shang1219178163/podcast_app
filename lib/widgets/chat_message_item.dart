@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:podcast_app/widgets/floating_menu.dart';
 import '../models/chat_message.dart';
 import '../widgets/network_image_widget.dart';
-import 'message_action_menu/index.dart';
 
 class ChatMessageItem extends StatelessWidget {
   final ChatMessage message;
@@ -9,14 +9,14 @@ class ChatMessageItem extends StatelessWidget {
   final VoidCallback? onTapAvatar;
   final VoidCallback? onLongPress;
   final VoidCallback? onTapMessage;
-  final Function(ChatMessage)? onCopy;
-  final Function(ChatMessage)? onForward;
-  final Function(ChatMessage)? onReply;
-  final Function(ChatMessage)? onMultiSelect;
-  final Function(ChatMessage)? onEdit;
-  final Function(ChatMessage)? onDelete;
-  final Function(ChatMessage)? onRead;
-  final Function(ChatMessage)? onMore;
+  final VoidCallback? onCopy;
+  final VoidCallback? onForward;
+  final VoidCallback? onReply;
+  final VoidCallback? onMultiSelect;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onRead;
+  final VoidCallback? onMore;
 
   const ChatMessageItem({
     super.key,
@@ -34,25 +34,6 @@ class ChatMessageItem extends StatelessWidget {
     this.onRead,
     this.onMore,
   });
-
-  void _showMessageMenu(BuildContext context, TapDownDetails details) {
-    final isSentByMe = message.senderId?.isNotEmpty != true;
-
-    MessageActionMenu.show(
-      context: context,
-      message: message,
-      position: details.globalPosition,
-      isSentByMe: isSentByMe,
-      onCopy: () => onCopy?.call(message),
-      onForward: () => onForward?.call(message),
-      onReply: () => onReply?.call(message),
-      onMultiSelect: () => onMultiSelect?.call(message),
-      onEdit: () => onEdit?.call(message),
-      onDelete: () => onDelete?.call(message),
-      onRead: () => onRead?.call(message),
-      onMore: () => onMore?.call(message),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,5 +197,112 @@ class ChatMessageItem extends StatelessWidget {
       default:
         return const Text('不支持的消息类型');
     }
+  }
+
+  void hide() {
+    FloatingMenu.hide();
+  }
+
+  void _showMessageMenu(BuildContext context, TapDownDetails details) {
+    final isSentByMe = message.senderId?.isNotEmpty != true;
+
+    final isTextMessage = message.type == MessageType.text;
+    final isImageMessage = message.type == MessageType.image;
+
+    // 构建菜单项
+    final items = <FloatingMenuItem>[];
+    if (isTextMessage && onCopy != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.copy,
+        label: '复制',
+        onTap: () {
+          hide();
+          onCopy?.call();
+        },
+      ));
+    }
+
+    if (isTextMessage || isImageMessage && onForward != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.forward,
+        label: '转发',
+        onTap: () {
+          hide();
+          onForward?.call();
+        },
+      ));
+    }
+
+    if (onReply != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.reply,
+        label: '引用',
+        onTap: () {
+          hide();
+          onReply?.call();
+        },
+      ));
+    }
+
+    if (onMultiSelect != null) {
+      FloatingMenuItem(
+        icon: Icons.select_all,
+        label: '多选',
+        onTap: () {
+          hide();
+          onMultiSelect?.call();
+        },
+      );
+    }
+
+    if (isTextMessage && onEdit != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.edit,
+        label: '编辑',
+        onTap: () {
+          hide();
+          onEdit?.call();
+        },
+      ));
+    }
+
+    if (isSentByMe && onDelete != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.delete_outline,
+        label: '删除',
+        onTap: () {
+          hide();
+          onDelete?.call();
+        },
+      ));
+    }
+
+    if (isTextMessage && onRead != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.font_download,
+        label: '朗读',
+        onTap: () {
+          hide();
+          onRead?.call();
+        },
+      ));
+    }
+
+    if (onMore != null) {
+      items.add(FloatingMenuItem(
+        icon: Icons.info_outline,
+        label: '更多',
+        onTap: () {
+          hide();
+          onMore?.call();
+        },
+      ));
+    }
+    // 显示菜单
+    FloatingMenu.show(
+      context: context,
+      position: details.globalPosition,
+      items: items,
+    );
   }
 }

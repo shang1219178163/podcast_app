@@ -18,41 +18,44 @@ class TestPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildWrapView(context),
-              const SizedBox(height: 20),
-              // 测试按钮
-              ElevatedButton(
-                onPressed: () {
-                  // 创建一个测试消息
-                  final message = ChatMessage(
-                    id: 'test_1',
-                    content: '这是一条测试消息',
-                    senderId: 'user_1',
-                    senderName: '测试用户',
-                    senderAvatar: 'https://via.placeholder.com/40',
-                    type: MessageType.text,
-                    timestamp: DateTime.now(),
-                  );
-
-                  // 显示菜单
-                  MessageActionMenu.show(
-                    context: context,
-                    message: message,
-                    position: const Offset(200, 300),
-                    isSentByMe: true,
-                    onCopy: () => Get.snackbar('提示', '复制消息'),
-                    onForward: () => Get.snackbar('提示', '转发消息'),
-                    onReply: () => Get.snackbar('提示', '引用消息'),
-                    onMultiSelect: () => Get.snackbar('提示', '多选消息'),
-                    onEdit: () => Get.snackbar('提示', '编辑消息'),
-                    onDelete: () => Get.snackbar('提示', '删除消息'),
-                    onRead: () => Get.snackbar('提示', '朗读消息'),
-                    onMore: () => Get.snackbar('提示', '更多操作'),
-                  );
-                },
-                child: const Text('显示文本消息菜单'),
+              SizedBox(
+                height: 300, // 给菜单一个固定高度
+                child: buildWrapView(context),
               ),
               const SizedBox(height: 20),
+              // 测试按钮
+              // ElevatedButton(
+              //   onPressed: () {
+              //     // 创建一个测试消息
+              //     final message = ChatMessage(
+              //       id: 'test_1',
+              //       content: '这是一条测试消息',
+              //       senderId: 'user_1',
+              //       senderName: '测试用户',
+              //       senderAvatar: 'https://via.placeholder.com/40',
+              //       type: MessageType.text,
+              //       timestamp: DateTime.now(),
+              //     );
+
+              //     // 显示菜单
+              //     MessageActionMenu.show(
+              //       context: context,
+              //       message: message,
+              //       position: const Offset(200, 300),
+              //       isSentByMe: true,
+              //       onCopy: () => Get.snackbar('提示', '复制消息'),
+              //       onForward: () => Get.snackbar('提示', '转发消息'),
+              //       onReply: () => Get.snackbar('提示', '引用消息'),
+              //       onMultiSelect: () => Get.snackbar('提示', '多选消息'),
+              //       onEdit: () => Get.snackbar('提示', '编辑消息'),
+              //       onDelete: () => Get.snackbar('提示', '删除消息'),
+              //       onRead: () => Get.snackbar('提示', '朗读消息'),
+              //       onMore: () => Get.snackbar('提示', '更多操作'),
+              //     );
+              //   },
+              //   child: const Text('显示文本消息菜单'),
+              // ),
+              // const SizedBox(height: 20),
             ],
           ),
         ),
