@@ -2,15 +2,19 @@ class Podcast {
   final String? id;
   final String? title;
   final String? author;
-  final String? subscribers;
   final String? cover;
+  final String? description;
+  final String? subscribers;
+  final String? category;
 
-  const Podcast({
+  Podcast({
     this.id,
     this.title,
     this.author,
-    this.subscribers,
     this.cover,
+    this.description,
+    this.subscribers,
+    this.category,
   });
 
   factory Podcast.fromJson(Map<String, dynamic> json) {
@@ -18,8 +22,10 @@ class Podcast {
       id: json['id'] as String?,
       title: json['title'] as String?,
       author: json['author'] as String?,
-      subscribers: json['subscribers'] as String?,
       cover: json['cover'] as String?,
+      description: json['description'] as String?,
+      subscribers: json['subscribers'] as String?,
+      category: json['category'] as String?,
     );
   }
 
@@ -28,8 +34,10 @@ class Podcast {
       'id': id,
       'title': title,
       'author': author,
-      'subscribers': subscribers,
       'cover': cover,
+      'description': description,
+      'subscribers': subscribers,
+      'category': category,
     };
   }
 }

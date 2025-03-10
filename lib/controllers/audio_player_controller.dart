@@ -129,6 +129,7 @@ class AudioPlayerController extends GetxController {
   Future<void> _initAudioPlayer() async {
     LogUtil.i('初始化音频播放器');
     try {
+      print('初始化音频播放器');
       // 设置音频会话
       final session = await AudioSession.instance;
       await session.configure(const AudioSessionConfiguration(
@@ -236,6 +237,7 @@ class AudioPlayerController extends GetxController {
   Future<void> switchTrack(int index) async {
     LogUtil.d('切换到音频: $index');
     try {
+      print('切换到音频: $index');
       if (index != currentIndex.value) {
         // 先更新索引，这样 UI 会立即更新
         currentIndex.value = index;
@@ -262,6 +264,7 @@ class AudioPlayerController extends GetxController {
   Future<void> play(String url) async {
     LogUtil.d('开始播放音频: $url');
     try {
+      print('开始播放音频: $url');
       await _audioPlayer.setUrl(url);
       LogUtil.d('音频 URL 设置成功');
       await _audioPlayer.play();

@@ -100,6 +100,7 @@ class DiscoverPage extends GetView<DiscoverController> {
             subtitle: route,
             icon: Icons.route,
             onTap: () => controller.onRouteSelected(route),
+            accessoryType: CellAccessoryType.none,
           );
         },
       ),

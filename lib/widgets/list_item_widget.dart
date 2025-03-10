@@ -101,7 +101,7 @@ class ListItemWidget extends StatelessWidget {
         if (trailing != null) ...[
           const SizedBox(width: 8),
           trailing!,
-        ] else if (showArrow && onTap != null) ...[
+        ] else if (showArrow && accessoryType != CellAccessoryType.none && onTap != null) ...[
           const SizedBox(width: 8),
           _buildAccessory(),
         ],
