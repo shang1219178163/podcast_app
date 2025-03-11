@@ -9,15 +9,20 @@ class SubscriptionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
-            title: Text('我的订阅', style: TextStyle(color: Colors.black)),
-            backgroundColor: Colors.white,
+            title: Text(
+              '我的订阅',
+              style: TextStyle(color: theme.colorScheme.onSurface),
+            ),
+            backgroundColor: theme.scaffoldBackgroundColor,
             elevation: 0,
+            iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
           ),
           SliverPadding(
             padding: const EdgeInsets.all(AppConstants.defaultPadding),
@@ -39,14 +44,15 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: const EdgeInsets.only(bottom: AppConstants.defaultPadding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: theme.shadowColor.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -67,22 +73,34 @@ class SubscriptionCard extends StatelessWidget {
               errorWidget: Container(
                 width: 60,
                 height: 60,
-                color: Colors.grey[200],
-                child: const Icon(Icons.image, color: Colors.grey),
+                color: theme.colorScheme.surface,
+                child: Icon(
+                  Icons.image,
+                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                ),
               ),
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           '未来科技浪潮',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
           ),
         ),
-        subtitle: const Text('科技早知道'),
+        subtitle: Text(
+          '科技早知道',
+          style: TextStyle(
+            color: theme.colorScheme.onSurface.withOpacity(0.6),
+          ),
+        ),
         trailing: IconButton(
-          icon: const Icon(Icons.more_vert),
+          icon: Icon(
+            Icons.more_vert,
+            color: theme.colorScheme.onSurface.withOpacity(0.6),
+          ),
           onPressed: () {},
         ),
         onTap: () => Get.toNamed(AppRoute.player),

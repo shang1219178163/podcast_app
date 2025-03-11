@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:podcast_app/extension/widget_ext.dart';
-import '../models/chat_message.dart';
-import '../widgets/message_action_menu/index.dart';
+import 'package:podcast_app/widgets/floating_menu.dart';
+
+import '../widgets/floating_menu/index.dart';
 
 class TestPage extends StatelessWidget {
   const TestPage({super.key});
@@ -18,44 +18,20 @@ class TestPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 300, // 给菜单一个固定高度
-                child: buildWrapView(context),
-              ),
+              buildWrapView(context),
               const SizedBox(height: 20),
-              // 测试按钮
-              // ElevatedButton(
-              //   onPressed: () {
-              //     // 创建一个测试消息
-              //     final message = ChatMessage(
-              //       id: 'test_1',
-              //       content: '这是一条测试消息',
-              //       senderId: 'user_1',
-              //       senderName: '测试用户',
-              //       senderAvatar: 'https://via.placeholder.com/40',
-              //       type: MessageType.text,
-              //       timestamp: DateTime.now(),
-              //     );
-
-              //     // 显示菜单
-              //     MessageActionMenu.show(
-              //       context: context,
-              //       message: message,
-              //       position: const Offset(200, 300),
-              //       isSentByMe: true,
-              //       onCopy: () => Get.snackbar('提示', '复制消息'),
-              //       onForward: () => Get.snackbar('提示', '转发消息'),
-              //       onReply: () => Get.snackbar('提示', '引用消息'),
-              //       onMultiSelect: () => Get.snackbar('提示', '多选消息'),
-              //       onEdit: () => Get.snackbar('提示', '编辑消息'),
-              //       onDelete: () => Get.snackbar('提示', '删除消息'),
-              //       onRead: () => Get.snackbar('提示', '朗读消息'),
-              //       onMore: () => Get.snackbar('提示', '更多操作'),
-              //     );
-              //   },
-              //   child: const Text('显示文本消息菜单'),
-              // ),
-              // const SizedBox(height: 20),
+              GestureDetector(
+                onTapDown: (details) => _showMessageMenu(context, details: details),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: const Text('显示文本消息菜单'),
+                ),
+              ),
             ],
           ),
         ),
@@ -68,54 +44,54 @@ class TestPage extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     final menuWidth = screenSize.width * 0.84;
-    final menuOffset = 20.0;
+    const menuOffset = 20.0;
 
     // 构建菜单项
-    final items = <ActionItem>[];
-    items.add(ActionItem(
+    final items = <FloatingMenuItem>[];
+    items.add(FloatingMenuItem(
       icon: Icons.copy,
       label: '复制',
       onTap: () {},
     ));
 
-    items.add(ActionItem(
+    items.add(FloatingMenuItem(
       icon: Icons.forward,
       label: '转发',
       onTap: () {},
     ));
 
     items.addAll([
-      ActionItem(
+      FloatingMenuItem(
         icon: Icons.reply,
         label: '引用',
         onTap: () {},
       ),
-      ActionItem(
+      FloatingMenuItem(
         icon: Icons.select_all,
         label: '多选',
         onTap: () {},
       ),
     ]);
 
-    items.add(ActionItem(
+    items.add(FloatingMenuItem(
       icon: Icons.edit,
       label: '编辑',
       onTap: () {},
     ));
 
-    items.add(ActionItem(
+    items.add(FloatingMenuItem(
       icon: Icons.delete_outline,
       label: '删除',
       onTap: () {},
     ));
 
-    items.add(ActionItem(
+    items.add(FloatingMenuItem(
       icon: Icons.font_download,
       label: '朗读',
       onTap: () {},
     ));
 
-    items.add(ActionItem(
+    items.add(FloatingMenuItem(
       icon: Icons.info_outline,
       label: '更多',
       onTap: () {},
@@ -164,6 +140,115 @@ class TestPage extends StatelessWidget {
           ).toBorder(color: Colors.red),
         ),
       ),
+    );
+  }
+
+  void _showMessageMenu(
+    BuildContext context, {
+    required TapDownDetails details,
+    VoidCallback? onCopy,
+    VoidCallback? onForward,
+    VoidCallback? onReply,
+    VoidCallback? onMultiSelect,
+    VoidCallback? onEdit,
+    VoidCallback? onDelete,
+    VoidCallback? onRead,
+    VoidCallback? onMore,
+  }) {
+    void hide() {
+      NFloatingMenu.hide();
+    }
+
+    // 构建菜单项
+    final items = <NFloatingMenuItem>[];
+    items.add(NFloatingMenuItem(
+      icon: Icons.copy,
+      label: '复制',
+      onTap: () {
+        hide();
+        onCopy?.call();
+      },
+    ));
+
+    items.add(NFloatingMenuItem(
+      icon: Icons.forward,
+      label: '转发',
+      onTap: () {
+        hide();
+        onForward?.call();
+      },
+    ));
+
+    // if (onReply != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.reply,
+      label: '引用',
+      onTap: () {
+        hide();
+        onReply?.call();
+      },
+    ));
+    // }
+
+    // if (onMultiSelect != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.select_all,
+      label: '多选',
+      onTap: () {
+        hide();
+        onMultiSelect?.call();
+      },
+    ));
+    // }
+
+    // if (onEdit != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.edit,
+      label: '编辑',
+      onTap: () {
+        hide();
+        onEdit?.call();
+      },
+    ));
+    // }
+
+    // if (isSentByMe && onDelete != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.delete_outline,
+      label: '删除',
+      onTap: () {
+        hide();
+        onDelete?.call();
+      },
+    ));
+    // }
+
+    // if (isTextMessage && onRead != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.font_download,
+      label: '朗读',
+      onTap: () {
+        hide();
+        onRead?.call();
+      },
+    ));
+    // }
+
+    // if (onMore != null) {
+    items.add(NFloatingMenuItem(
+      icon: Icons.info_outline,
+      label: '更多',
+      onTap: () {
+        hide();
+        onMore?.call();
+      },
+    ));
+    // }
+    // 显示菜单
+    NFloatingMenu.show(
+      context: context,
+      position: details.globalPosition,
+      items: items,
     );
   }
 }

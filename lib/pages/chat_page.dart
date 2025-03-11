@@ -10,8 +10,9 @@ class ChatPage extends GetView<ChatController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFEDEDED),
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         // backgroundColor: const Color(0xFF2C2C2C),
         title: Column(
@@ -19,18 +20,27 @@ class ChatPage extends GetView<ChatController> {
           children: [
             Text(
               controller.chatTitle,
-              style: const TextStyle(fontSize: 17),
+              style: TextStyle(
+                fontSize: 17,
+                color: theme.colorScheme.onSurface,
+              ),
             ),
             if (controller.isTyping.value)
-              const Text(
+              Text(
                 '对方正在输入...',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                ),
               ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_horiz),
+            icon: Icon(
+              Icons.more_horiz,
+              color: theme.colorScheme.onSurface,
+            ),
             onPressed: () => _showMoreActions(context),
           ),
         ],
@@ -101,20 +111,21 @@ class ChatPage extends GetView<ChatController> {
   }
 
   Widget _buildTimeStamp(DateTime time) {
+    final theme = Theme.of(Get.context!);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Center(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.1),
+            color: theme.colorScheme.onSurface.withOpacity(0.1),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             _formatTime(time),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: Colors.white,
+              color: theme.colorScheme.onSurface.withOpacity(0.8),
             ),
           ),
         ),
@@ -134,30 +145,56 @@ class ChatPage extends GetView<ChatController> {
   }
 
   void _showMoreActions(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
+      backgroundColor: theme.scaffoldBackgroundColor,
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            leading: const Icon(Icons.person_add),
-            title: const Text('添加成员'),
+            leading: Icon(
+              Icons.person_add,
+              color: theme.colorScheme.primary,
+            ),
+            title: Text(
+              '添加成员',
+              style: TextStyle(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
             onTap: () {
               Get.back();
               controller.addMember();
             },
           ),
           ListTile(
-            leading: const Icon(Icons.search),
-            title: const Text('搜索聊天记录'),
+            leading: Icon(
+              Icons.search,
+              color: theme.colorScheme.primary,
+            ),
+            title: Text(
+              '搜索聊天记录',
+              style: TextStyle(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
             onTap: () {
               Get.back();
               controller.searchMessages();
             },
           ),
           ListTile(
-            leading: const Icon(Icons.delete_outline),
-            title: const Text('清空聊天记录'),
+            leading: Icon(
+              Icons.delete_outline,
+              color: theme.colorScheme.error,
+            ),
+            title: Text(
+              '清空聊天记录',
+              style: TextStyle(
+                color: theme.colorScheme.error,
+              ),
+            ),
             onTap: () {
               Get.back();
               controller.clearMessages();
@@ -169,6 +206,7 @@ class ChatPage extends GetView<ChatController> {
   }
 
   void _showMessageActions(BuildContext context, ChatMessage message) {
+    final theme = Theme.of(context);
     final isSentByMe = message.senderId == controller.currentUserId;
     final isTextMessage = message.type == MessageType.text;
     final isImageMessage = message.type == MessageType.image;
@@ -178,9 +216,9 @@ class ChatPage extends GetView<ChatController> {
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         padding: const EdgeInsets.only(bottom: 8),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
         ),
         child: SafeArea(
           child: Column(
@@ -192,7 +230,7 @@ class ChatPage extends GetView<ChatController> {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: theme.dividerColor,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -207,6 +245,7 @@ class ChatPage extends GetView<ChatController> {
                 children: [
                   if (isTextMessage) ...[
                     _buildActionItem(
+                      context: context,
                       icon: Icons.copy,
                       label: '复制',
                       onTap: () {
@@ -217,6 +256,7 @@ class ChatPage extends GetView<ChatController> {
                   ],
                   if (isTextMessage || isImageMessage) ...[
                     _buildActionItem(
+                      context: context,
                       icon: Icons.forward,
                       label: '转发',
                       onTap: () {
@@ -226,6 +266,7 @@ class ChatPage extends GetView<ChatController> {
                     ),
                   ],
                   _buildActionItem(
+                    context: context,
                     icon: Icons.reply,
                     label: '引用',
                     onTap: () {
@@ -234,6 +275,7 @@ class ChatPage extends GetView<ChatController> {
                     },
                   ),
                   _buildActionItem(
+                    context: context,
                     icon: Icons.select_all,
                     label: '多选',
                     onTap: () {
@@ -243,6 +285,7 @@ class ChatPage extends GetView<ChatController> {
                   ),
                   if (isTextMessage) ...[
                     _buildActionItem(
+                      context: context,
                       icon: Icons.edit,
                       label: '编辑',
                       onTap: () {
@@ -253,6 +296,7 @@ class ChatPage extends GetView<ChatController> {
                   ],
                   if (isSentByMe) ...[
                     _buildActionItem(
+                      context: context,
                       icon: Icons.delete_outline,
                       label: '删除',
                       onTap: () {
@@ -263,6 +307,7 @@ class ChatPage extends GetView<ChatController> {
                   ],
                   if (isTextMessage) ...[
                     _buildActionItem(
+                      context: context,
                       icon: Icons.font_download,
                       label: '朗读',
                       onTap: () {
@@ -272,6 +317,7 @@ class ChatPage extends GetView<ChatController> {
                     ),
                   ],
                   _buildActionItem(
+                    context: context,
                     icon: Icons.info_outline,
                     label: '更多',
                     onTap: () {
@@ -289,17 +335,17 @@ class ChatPage extends GetView<ChatController> {
                 child: TextButton(
                   onPressed: () => Get.back(),
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.white,
+                    backgroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '取消',
                     style: TextStyle(
                       fontSize: 17,
-                      color: Colors.black,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -312,10 +358,12 @@ class ChatPage extends GetView<ChatController> {
   }
 
   Widget _buildActionItem({
+    required BuildContext context,
     required IconData icon,
     required String label,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -325,21 +373,21 @@ class ChatPage extends GetView<ChatController> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               icon,
               size: 28,
-              color: Colors.black87,
+              color: theme.colorScheme.primary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: Colors.black87,
+              color: theme.colorScheme.onSurface,
             ),
           ),
         ],

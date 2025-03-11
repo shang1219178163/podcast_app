@@ -305,4 +305,5 @@ class ChatMessageItem extends StatelessWidget {
       items: items,
     );
   }
+
 }

@@ -8,48 +8,64 @@ class PersonalProfilePage extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '个人资料',
           style: TextStyle(
-            color: Colors.black,
+            color: theme.colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: theme.colorScheme.primary,
+            ),
+          );
         }
         final profile = controller.userProfile.value;
         if (profile == null) {
-          return const Center(child: Text('加载失败'));
+          return Center(
+            child: Text(
+              '加载失败',
+              style: TextStyle(
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          );
         }
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            _buildAvatarSection(profile),
+            _buildAvatarSection(profile, context),
             const SizedBox(height: 24),
             _buildProfileField(
+              context: context,
               title: '昵称',
               value: (profile['nickname'] as String?) ?? '',
               onTap: () => _showEditDialog(context, 'nickname'),
             ),
             _buildProfileField(
+              context: context,
               title: '个人简介',
               value: (profile['bio'] as String?) ?? '',
               onTap: () => _showEditDialog(context, 'bio'),
             ),
             _buildProfileField(
+              context: context,
               title: '手机号',
               value: (profile['phone'] as String?) ?? '未绑定',
               onTap: () => _showEditDialog(context, 'phone'),
             ),
             _buildProfileField(
+              context: context,
               title: '邮箱',
               value: (profile['email'] as String?) ?? '未绑定',
               onTap: () => _showEditDialog(context, 'email'),
@@ -60,7 +76,8 @@ class PersonalProfilePage extends GetView<ProfileController> {
     );
   }
 
-  Widget _buildAvatarSection(Map<String, dynamic> profile) {
+  Widget _buildAvatarSection(Map<String, dynamic> profile, BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Column(
         children: [
@@ -76,12 +93,12 @@ class PersonalProfilePage extends GetView<ProfileController> {
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Theme.of(Get.context!).primaryColor,
+                    color: theme.colorScheme.primary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.camera_alt,
-                    color: Colors.white,
+                    color: theme.colorScheme.onPrimary,
                     size: 20,
                   ),
                 ),
@@ -91,9 +108,10 @@ class PersonalProfilePage extends GetView<ProfileController> {
           const SizedBox(height: 16),
           Text(
             (profile['nickname'] as String?) ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
             ),
           ),
         ],
@@ -102,19 +120,35 @@ class PersonalProfilePage extends GetView<ProfileController> {
   }
 
   Widget _buildProfileField({
+    required BuildContext context,
     required String title,
     required String value,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
     return ListTile(
-      title: Text(title),
-      subtitle: Text(value),
-      trailing: const Icon(Icons.chevron_right),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          color: theme.colorScheme.onSurface.withOpacity(0.6),
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: theme.colorScheme.onSurface.withOpacity(0.4),
+      ),
       onTap: onTap,
     );
   }
 
   void _showEditDialog(BuildContext context, String field) {
+    final theme = Theme.of(context);
     final controller = TextEditingController(
       text: (this.controller.userProfile.value?[field] as String?) ?? '',
     );
@@ -127,6 +161,12 @@ class PersonalProfilePage extends GetView<ProfileController> {
           child: CupertinoTextField(
             controller: controller,
             placeholder: '请输入新的$field',
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
+            ),
+            placeholderStyle: TextStyle(
+              color: theme.colorScheme.onSurface.withOpacity(0.6),
+            ),
             onSubmitted: (value) {
               if (value.isNotEmpty) {
                 final newProfile = Map<String, dynamic>.from(
@@ -141,11 +181,21 @@ class PersonalProfilePage extends GetView<ProfileController> {
         ),
         actions: [
           CupertinoDialogAction(
-            child: const Text('取消'),
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+              ),
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           CupertinoDialogAction(
-            child: const Text('确定'),
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+              ),
+            ),
             onPressed: () {
               final newValue = controller.text;
               if (newValue.isNotEmpty) {

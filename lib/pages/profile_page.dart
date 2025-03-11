@@ -8,8 +8,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(),
@@ -28,21 +29,22 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildAppBar() {
+    final theme = Theme.of(Get.context!);
     return SliverAppBar(
       pinned: true,
-      title: const Text(
+      title: Text(
         '我的',
         style: TextStyle(
-          color: Colors.black,
+          color: theme.colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       actions: [
         IconButton(
-          icon: const Icon(Icons.settings, color: Colors.black),
+          icon: Icon(Icons.settings, color: theme.colorScheme.onSurface),
           onPressed: () => Get.to(() => const SettingsPage()),
         ),
       ],
@@ -50,6 +52,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildUserInfo() {
+    final theme = Theme.of(Get.context!);
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -59,7 +62,7 @@ class ProfilePage extends StatelessWidget {
             backgroundImage: NetworkImage(AppConstants.podcastCovers['future_tech'] ?? AppConstants.placeholderImage),
           ),
           const SizedBox(width: 20),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,14 +71,15 @@ class ProfilePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'ID: 888888',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey,
+                    color: theme.colorScheme.onSurface.withOpacity(0.6),
                   ),
                 ),
               ],
@@ -87,11 +91,12 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildStatistics() {
+    final theme = Theme.of(Get.context!);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Colors.grey[200]!),
+          bottom: BorderSide(color: theme.dividerColor),
         ),
       ),
       child: Row(
@@ -107,13 +112,15 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildStatItem(String label, String value) {
+    final theme = Theme.of(Get.context!);
     return Column(
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 4),
@@ -121,7 +128,7 @@ class ProfilePage extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey[600],
+            color: theme.colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
       ],
@@ -170,10 +177,19 @@ class ProfilePage extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(Get.context!);
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: const Icon(Icons.chevron_right),
+      leading: Icon(icon, color: theme.colorScheme.primary),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: theme.colorScheme.onSurface.withOpacity(0.6),
+      ),
       onTap: onTap,
     );
   }

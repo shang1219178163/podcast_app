@@ -8,16 +8,17 @@ class DiscoverPage extends GetView<DiscoverController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(),
+          _buildAppBar(context),
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSearchBar(),
+                _buildSearchBar(context),
                 _buildRoutesList(),
               ],
             ),
@@ -27,49 +28,61 @@ class DiscoverPage extends GetView<DiscoverController> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
+    final theme = Theme.of(context);
     return SliverAppBar(
       pinned: true,
-      title: const Text(
+      title: Text(
         '路由导航',
         style: TextStyle(
-          color: Colors.black,
+          color: theme.colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.w500,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       actions: [
         IconButton(
-          icon: const Icon(Icons.refresh, color: Colors.black87),
+          icon: Icon(
+            Icons.refresh,
+            color: theme.colorScheme.onSurface.withOpacity(0.8),
+          ),
           onPressed: controller.refreshData,
         ),
       ],
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: TextField(
             onChanged: controller.filterRoutes,
             textAlignVertical: TextAlignVertical.center,
-            style: const TextStyle(fontSize: 16),
+            style: TextStyle(
+              fontSize: 16,
+              color: theme.colorScheme.onSurface,
+            ),
             decoration: InputDecoration(
               hintText: '搜索路由...',
               hintStyle: TextStyle(
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
                 fontSize: 16,
               ),
-              prefixIcon: Icon(Icons.search, color: Colors.grey[600], size: 22),
+              prefixIcon: Icon(
+                Icons.search,
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                size: 22,
+              ),
               border: InputBorder.none,
               isDense: true,
               contentPadding: EdgeInsets.zero,
@@ -98,19 +111,22 @@ class DiscoverPage extends GetView<DiscoverController> {
           return ListItemWidget(
             title: title,
             subtitle: route,
-            icon: const Icon(Icons.route),
+            icon: Icon(
+              Icons.route,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             titleRight: Text(
               '示例',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             subtitleRight: Text(
               '路由',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey[400],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
               ),
             ),
             onTap: () => controller.onRouteSelected(route),

@@ -9,7 +9,6 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:podcast_app/extension/color_ext.dart';
 
@@ -77,7 +76,7 @@ extension WidgetExt on Widget {
         child: this,
       );
 
-  toShowCupertinoDialog({
+  Future toShowCupertinoDialog({
     required BuildContext context,
     String? barrierLabel,
     bool useRootNavigator = true,
@@ -94,7 +93,7 @@ extension WidgetExt on Widget {
       );
 
   ///showCupertinoModalPopup
-  toShowCupertinoModalPopup({
+  Future toShowCupertinoModalPopup({
     required BuildContext context,
     ImageFilter? filter,
     Color barrierColor = kCupertinoModalBarrierColor,
@@ -114,7 +113,7 @@ extension WidgetExt on Widget {
       );
 
   ///弹窗
-  toShowGeneralDialog({
+  Future<Object?> toShowGeneralDialog({
     required BuildContext context,
     bool barrierDismissible = false,
     String? barrierLabel = 'barrierLabel',
@@ -151,7 +150,7 @@ extension WidgetExt on Widget {
       );
 
   ///正面弹窗
-  toShowDialog({
+  Future toShowDialog({
     required BuildContext context,
     bool barrierDismissible = true,
     Color? barrierColor = Colors.black54,
@@ -171,7 +170,7 @@ extension WidgetExt on Widget {
       );
 
   ///底部弹窗
-  toShowModalBottomSheet({
+  Future toShowModalBottomSheet({
     required BuildContext context,
     Color? backgroundColor,
     double? elevation,
@@ -202,7 +201,7 @@ extension WidgetExt on Widget {
       );
 
   /// 加拟物风格
-  toNeumorphism({
+  Container toNeumorphism({
     double borderRadius = 10.0,
     Offset offset = const Offset(5, 5),
     double blurRadius = 10,
@@ -321,7 +320,7 @@ extension ListViewExt on ListView {
 extension CustomScrollViewExt on CustomScrollView {
   /// 转为 ListView
   ListView toListView() {
-    final children = slivers.map((e) => (e is SliverToBoxAdapter ? e.child ?? SizedBox() : e)).toList();
+    final children = slivers.map((e) => (e is SliverToBoxAdapter ? e.child ?? const SizedBox() : e)).toList();
     return ListView(
       key: key,
       scrollDirection: scrollDirection,
@@ -351,7 +350,7 @@ extension CustomScrollViewExt on CustomScrollView {
     TextDirection? textDirection,
     Clip clipBehavior = Clip.none,
   }) {
-    final children = slivers.map((e) => (e is SliverToBoxAdapter ? e.child ?? SizedBox() : e)).toList();
+    final children = slivers.map((e) => (e is SliverToBoxAdapter ? e.child ?? const SizedBox() : e)).toList();
     return Flex(
       key: key,
       direction: direction,

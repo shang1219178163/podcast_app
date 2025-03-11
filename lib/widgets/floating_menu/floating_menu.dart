@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'floating_menu_item.dart';
+import 'floating_menu_theme.dart';
 
-/// 浮层菜单弹窗
-class FloatingMenu {
+class NFloatingMenu {
   static OverlayEntry? _overlayEntry;
   static bool _isVisible = false;
 
   static void show({
     required BuildContext context,
     required Offset position,
-    required List<FloatingMenuItem> items,
+    required List<NFloatingMenuItem> items,
     double menuWidth = 0.84, // 菜单宽度占屏幕宽度的比例
     double menuOffset = 20.0, // 菜单与点击位置的偏移
   }) {
@@ -18,6 +19,9 @@ class FloatingMenu {
     }
 
     _isVisible = true;
+
+    // 获取主题
+    final menuTheme = FloatingMenuTheme.of(context);
 
     // 计算菜单位置
     final screenSize = MediaQuery.of(context).size;
@@ -67,7 +71,7 @@ class FloatingMenu {
             child: GestureDetector(
               onTap: hide,
               child: Container(
-                color: Colors.black.withOpacity(0.1),
+                color: menuTheme.maskColor,
               ),
             ),
           ),
@@ -92,27 +96,39 @@ class FloatingMenu {
                 color: Colors.transparent,
                 child: Container(
                   width: width,
-                  padding: aPadding,
+                  padding: menuTheme.padding,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    color: menuTheme.backgroundColor,
+                    borderRadius: BorderRadius.circular(menuTheme.borderRadius),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
+                        color: menuTheme.shadowColor,
+                        blurRadius: menuTheme.elevation,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                  child: Wrap(
-                    spacing: spacing, // 水平间距
-                    runSpacing: runSpacing, // 垂直间距
-                    children: items.map((item) {
-                      return SizedBox(
-                        width: itemWidth,
-                        child: item,
-                      );
-                    }).toList(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 菜单项
+                      Wrap(
+                        spacing: menuTheme.spacing,
+                        runSpacing: menuTheme.runSpacing,
+                        children: items.map((item) {
+                          return SizedBox(
+                            width: itemWidth,
+                            child: item.copyWith(
+                              backgroundColor: menuTheme.itemBackgroundColor,
+                              iconColor: menuTheme.iconColor,
+                              textColor: menuTheme.textColor,
+                              iconSize: menuTheme.iconSize,
+                              fontSize: menuTheme.fontSize,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -129,63 +145,5 @@ class FloatingMenu {
     _overlayEntry?.remove();
     _overlayEntry = null;
     _isVisible = false;
-  }
-}
-
-class FloatingMenuItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final double iconSize;
-  final double fontSize;
-  final Color? iconColor;
-  final Color? textColor;
-  final Color? backgroundColor;
-
-  const FloatingMenuItem({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.iconSize = 24,
-    this.fontSize = 10,
-    this.iconColor,
-    this.textColor,
-    this.backgroundColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: backgroundColor ?? Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              icon,
-              size: iconSize,
-              color: iconColor ?? Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: fontSize,
-              color: textColor ?? Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
   }
 }

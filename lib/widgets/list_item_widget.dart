@@ -60,17 +60,16 @@ class ListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
-    final defaultBackgroundColor =
-        isDark ? CupertinoColors.systemBackground.darkColor : CupertinoColors.systemBackground.color;
-    final highlightColor = isDark ? CupertinoColors.systemGrey6.darkColor : CupertinoColors.systemGrey6.color;
+    final theme = Theme.of(context);
+    final defaultBackgroundColor = theme.scaffoldBackgroundColor;
+    final highlightColor = theme.colorScheme.surface;
 
     final Widget content = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Leading
         if (imageUrl != null || icon != null) ...[
-          _buildLeading(),
+          _buildLeading(context),
           const SizedBox(width: 16),
         ],
 
@@ -89,7 +88,7 @@ class ListItemWidget extends StatelessWidget {
                       style: titleStyle ??
                           TextStyle(
                             fontSize: 17,
-                            color: isDark ? CupertinoColors.white : CupertinoColors.black,
+                            color: theme.colorScheme.onSurface,
                             fontWeight: FontWeight.w400,
                           ),
                       maxLines: 1,
@@ -112,7 +111,7 @@ class ListItemWidget extends StatelessWidget {
                         style: subtitleStyle ??
                             TextStyle(
                               fontSize: 15,
-                              color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
                               height: 1.2,
                             ),
                       ),
@@ -134,7 +133,7 @@ class ListItemWidget extends StatelessWidget {
           trailing!,
         ] else if (showArrow && accessoryType != CellAccessoryType.none && onTap != null) ...[
           const SizedBox(width: 8),
-          _buildAccessory(),
+          _buildAccessory(context),
         ],
       ],
     );
@@ -168,7 +167,7 @@ class ListItemWidget extends StatelessWidget {
                 child: Divider(
                   height: 0.5,
                   thickness: 0.5,
-                  color: CupertinoColors.separator.resolveFrom(context),
+                  color: theme.dividerColor,
                 ),
               ),
           ],
@@ -177,7 +176,8 @@ class ListItemWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLeading() {
+  Widget _buildLeading(BuildContext context) {
+    final theme = Theme.of(context);
     if (imageUrl != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(4),
@@ -189,8 +189,8 @@ class ListItemWidget extends StatelessWidget {
           errorWidget: Container(
             width: 40,
             height: 40,
-            color: Colors.grey[200],
-            child: const Icon(Icons.image, color: Colors.grey),
+            color: theme.colorScheme.surface,
+            child: Icon(Icons.image, color: theme.colorScheme.onSurface.withOpacity(0.4)),
           ),
         ),
       );
@@ -200,7 +200,8 @@ class ListItemWidget extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  Widget _buildAccessory() {
+  Widget _buildAccessory(BuildContext context) {
+    final theme = Theme.of(context);
     return Builder(
       builder: (context) {
         switch (accessoryType) {
@@ -208,13 +209,13 @@ class ListItemWidget extends StatelessWidget {
             return Icon(
               CupertinoIcons.chevron_forward,
               size: 14,
-              color: CupertinoColors.tertiaryLabel.resolveFrom(context),
+              color: theme.colorScheme.onSurface.withOpacity(0.4),
             );
           case CellAccessoryType.checkmark:
             return Icon(
               CupertinoIcons.checkmark,
               size: 18,
-              color: CupertinoColors.activeBlue.resolveFrom(context),
+              color: theme.colorScheme.primary,
             );
           case CellAccessoryType.none:
             return const SizedBox.shrink();

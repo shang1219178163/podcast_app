@@ -5,23 +5,29 @@ import 'package:podcast_app/utils/store_manager.dart';
 import 'routes/app_pages.dart';
 import 'bindings/initial_binding.dart';
 import 'package:podcast_app/theme/app_theme.dart';
+import 'theme/theme_provider.dart';
+import 'controllers/settings_controller.dart';
+import 'controllers/player_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await StoreManager.init();
 
+  // 初始化依赖注入
+  Get.put(ThemeProvider());
+  Get.put(SettingsController());
+  Get.put(PlayerController());
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-      // 根据登录状态决定初始路由
+    // 根据登录状态决定初始路由
     final bool isLoggedIn = StoreManager.getBool(StoreKey.isLoggedIn.name) ?? false;
     final String initialRoute = isLoggedIn ? AppRoute.tabBar : AppRoute.login;
     // LogUtil.i('Initial route: $initialRoute (isLoggedIn: $isLoggedIn)');
@@ -29,6 +35,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: '播客应用',
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeProvider.to.themeMode,
       initialBinding: InitialBinding(),
       initialRoute: initialRoute,
       getPages: AppPages.routes,

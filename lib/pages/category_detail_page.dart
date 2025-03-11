@@ -11,23 +11,29 @@ class CategoryDetailPage extends GetView<CategoryController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Obx(() => Text(
               controller.state.currentCategoryName.value,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: theme.colorScheme.onSurface,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             )),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
       ),
       body: Obx(() {
         if (controller.state.isLoading.value && controller.state.podcasts.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: theme.colorScheme.primary,
+            ),
+          );
         }
 
         return EasyRefresh(
@@ -35,21 +41,21 @@ class CategoryDetailPage extends GetView<CategoryController> {
           onRefresh: controller.onRefresh,
           onLoad: controller.onLoading,
           child: controller.state.podcasts.isEmpty
-              ? const Center(
+              ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.podcasts,
                         size: 64,
-                        color: Colors.grey,
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         '暂无播客内容',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey,
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
                         ),
                       ),
                     ],

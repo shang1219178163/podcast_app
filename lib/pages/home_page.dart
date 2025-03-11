@@ -10,61 +10,72 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          _buildAppBar(),
+          _buildAppBar(context),
           SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSearchBar(),
-                _buildCategories(),
-                _buildRecommendedSection(),
-                _buildNewEpisodesSection(),
-                _buildPopularSection(),
-              ],
-            ),
+            child: _buildSearchBar(),
+          ),
+          SliverToBoxAdapter(
+            child: _buildCategories(),
+          ),
+          SliverToBoxAdapter(
+            child: _buildRecommendedSection(),
+          ),
+          SliverToBoxAdapter(
+            child: _buildNewEpisodesSection(),
+          ),
+          SliverToBoxAdapter(
+            child: _buildPopularSection(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAppBar() {
-    return const SliverAppBar(
+  Widget _buildAppBar(BuildContext context) {
+    final theme = Theme.of(context);
+    return SliverAppBar(
       pinned: true,
+      leading: IconButton(
+        icon: Icon(Icons.menu, color: theme.colorScheme.onSurface),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      ),
       title: Text(
         '发现',
         style: TextStyle(
-          color: Colors.black,
+          color: theme.colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
     );
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(Get.context!);
     return Padding(
       padding: const EdgeInsets.all(AppConstants.defaultPadding),
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: theme.colorScheme.surface,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Row(
           children: [
             const SizedBox(width: 16),
-            Icon(Icons.search, color: Colors.grey[600]),
+            Icon(Icons.search, color: theme.colorScheme.onSurface.withOpacity(0.6)),
             const SizedBox(width: 8),
             Text(
               '搜索播客、节目、主播',
               style: TextStyle(
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
                 fontSize: 14,
               ),
             ),
@@ -93,6 +104,7 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: AppConstants.defaultPadding),
         itemCount: categories.length,
         itemBuilder: (context, index) {
+          final theme = Theme.of(context);
           return Container(
             width: 60,
             margin: const EdgeInsets.only(right: 16),
@@ -102,18 +114,21 @@ class HomePage extends StatelessWidget {
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withOpacity(0.1),
                     borderRadius: const BorderRadius.all(Radius.circular(25)),
                   ),
                   child: Icon(
                     categories[index]['icon'] as IconData,
-                    color: Theme.of(context).primaryColor,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   categories[index]['name'] as String,
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),
@@ -124,6 +139,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildRecommendedSection() {
+    final theme = Theme.of(Get.context!);
     return _buildSection(
       title: '为你推荐',
       child: SizedBox(
@@ -149,17 +165,18 @@ class HomePage extends StatelessWidget {
                       errorWidget: Container(
                         width: double.infinity,
                         height: 120,
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.image, color: Colors.grey),
+                        color: theme.colorScheme.surface,
+                        child: Icon(Icons.image, color: theme.colorScheme.onSurface.withOpacity(0.4)),
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     '未来科技浪潮',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -168,7 +185,7 @@ class HomePage extends StatelessWidget {
                     '科技早知道',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[600],
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -183,6 +200,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildNewEpisodesSection() {
+    final theme = Theme.of(Get.context!);
     return _buildSection(
       title: '最新更新',
       child: ListView.builder(
@@ -205,27 +223,28 @@ class HomePage extends StatelessWidget {
                 errorWidget: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image, color: Colors.grey),
+                  color: theme.colorScheme.surface,
+                  child: Icon(Icons.image, color: theme.colorScheme.onSurface.withOpacity(0.4)),
                 ),
               ),
             ),
-            title: const Text(
+            title: Text(
               'AI 技术的最新进展',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             subtitle: Text(
               '科技早知道 · 2小时前',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: Icon(Icons.more_vert, color: theme.colorScheme.onSurface.withOpacity(0.6)),
               onPressed: () {},
             ),
             onTap: () => Get.toNamed(AppRoute.player),
@@ -236,6 +255,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildPopularSection() {
+    final theme = Theme.of(Get.context!);
     return _buildSection(
       title: '热门播客',
       child: ListView.builder(
@@ -258,27 +278,28 @@ class HomePage extends StatelessWidget {
                 errorWidget: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image, color: Colors.grey),
+                  color: theme.colorScheme.surface,
+                  child: Icon(Icons.image, color: theme.colorScheme.onSurface.withOpacity(0.4)),
                 ),
               ),
             ),
-            title: const Text(
+            title: Text(
               '未来科技浪潮',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             subtitle: Text(
               '科技早知道 · 2.3万订阅',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: Icon(Icons.more_vert, color: theme.colorScheme.onSurface.withOpacity(0.6)),
               onPressed: () {},
             ),
             onTap: () => Get.toNamed(AppRoute.podcastDetail),
@@ -289,6 +310,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildSection({required String title, required Widget child}) {
+    final theme = Theme.of(Get.context!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -299,14 +321,20 @@ class HomePage extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('更多'),
+                child: Text(
+                  '更多',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
               ),
             ],
           ),

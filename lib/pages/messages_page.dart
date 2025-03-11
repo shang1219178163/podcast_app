@@ -6,18 +6,21 @@ class MessagesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '消息中心',
           style: TextStyle(
-            color: Colors.black,
+            color: theme.colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
+        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
         actions: [
           TextButton(
             onPressed: () {
@@ -26,9 +29,14 @@ class MessagesPage extends StatelessWidget {
                 '成功',
                 '已清空消息',
                 snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: theme.colorScheme.surface,
+                colorText: theme.colorScheme.onSurface,
               );
             },
-            child: const Text('清空'),
+            child: Text(
+              '清空',
+              style: TextStyle(color: theme.colorScheme.primary),
+            ),
           ),
         ],
       ),
@@ -39,24 +47,25 @@ class MessagesPage extends StatelessWidget {
           return ListTile(
             contentPadding: const EdgeInsets.symmetric(vertical: 8),
             leading: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+              backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
               child: Icon(
                 _getMessageIcon(index),
-                color: Theme.of(context).primaryColor,
+                color: theme.colorScheme.primary,
               ),
             ),
             title: Text(
               _getMessageTitle(index),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             subtitle: Text(
               _getMessageContent(index),
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -65,7 +74,7 @@ class MessagesPage extends StatelessWidget {
               '2小时前',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey[400],
+                color: theme.colorScheme.onSurface.withOpacity(0.4),
               ),
             ),
             onTap: () {

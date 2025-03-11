@@ -9,6 +9,7 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -24,22 +25,23 @@ class LoginPage extends GetView<LoginController> {
               ),
               const SizedBox(height: 24),
               // 标题
-              const Text(
+              Text(
                 '播客',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
               // 副标题
-              const Text(
+              Text(
                 '聆听世界的声音',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
               const Spacer(),
@@ -56,11 +58,21 @@ class LoginPage extends GetView<LoginController> {
                                   content: const Text('请先阅读并同意用户协议和隐私政策'),
                                   actions: [
                                     CupertinoDialogAction(
-                                      child: const Text('取消'),
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     CupertinoDialogAction(
-                                      child: const Text('同意并继续'),
+                                      child: Text(
+                                        '同意并继续',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
                                       onPressed: () {
                                         controller.agreedToTerms.value = true;
                                         Navigator.pop(context);
@@ -75,8 +87,8 @@ class LoginPage extends GetView<LoginController> {
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white,
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -90,9 +102,12 @@ class LoginPage extends GetView<LoginController> {
                           height: 24,
                         ),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           '微信登录',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: theme.colorScheme.onPrimary,
+                          ),
                         ),
                       ],
                     ),
@@ -111,11 +126,21 @@ class LoginPage extends GetView<LoginController> {
                                   content: const Text('请先阅读并同意用户协议和隐私政策'),
                                   actions: [
                                     CupertinoDialogAction(
-                                      child: const Text('取消'),
+                                      child: Text(
+                                        '取消',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     CupertinoDialogAction(
-                                      child: const Text('同意并继续'),
+                                      child: Text(
+                                        '同意并继续',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                        ),
+                                      ),
                                       onPressed: () {
                                         controller.agreedToTerms.value = true;
                                         Navigator.pop(context);
@@ -133,14 +158,15 @@ class LoginPage extends GetView<LoginController> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: Colors.grey),
+                        side: BorderSide(color: theme.colorScheme.onSurface.withOpacity(0.3)),
                       ),
+                      foregroundColor: theme.colorScheme.onSurface,
                     ),
-                    child: const Text(
+                    child: Text(
                       '手机号登录',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                   )),
@@ -150,8 +176,8 @@ class LoginPage extends GetView<LoginController> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Obx(() => Text.rich(
                       TextSpan(
-                        style: const TextStyle(
-                          color: Colors.black87,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
                           fontSize: 14,
                         ),
                         children: [
@@ -169,7 +195,7 @@ class LoginPage extends GetView<LoginController> {
                                 child: Checkbox(
                                   value: controller.agreedToTerms.value,
                                   onChanged: (_) => controller.toggleAgreement(),
-                                  activeColor: Theme.of(context).primaryColor,
+                                  activeColor: theme.colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -178,7 +204,7 @@ class LoginPage extends GetView<LoginController> {
                           TextSpan(
                             text: '《用户协议》',
                             style: TextStyle(
-                              color: Theme.of(context).primaryColor,
+                              color: theme.colorScheme.primary,
                             ),
                             recognizer: TapGestureRecognizer()..onTap = controller.openUserAgreement,
                           ),
@@ -186,14 +212,15 @@ class LoginPage extends GetView<LoginController> {
                           TextSpan(
                             text: '《隐私政策》',
                             style: TextStyle(
-                              color: Theme.of(context).primaryColor,
+                              color: theme.colorScheme.primary,
                             ),
                             recognizer: TapGestureRecognizer()..onTap = controller.openPrivacyPolicy,
                           ),
                         ],
                       ),
-                      style: const TextStyle(
+                      style: TextStyle(
                         textBaseline: TextBaseline.alphabetic,
+                        color: theme.colorScheme.onSurface,
                       ),
                     )),
               ),

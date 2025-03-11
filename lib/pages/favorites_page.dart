@@ -9,18 +9,21 @@ class FavoritesPage extends GetView<PodcastController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '我的收藏',
           style: TextStyle(
-            color: Colors.black,
+            color: theme.colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
+        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -38,30 +41,37 @@ class FavoritesPage extends GetView<PodcastController> {
                 errorWidget: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image, color: Colors.grey),
+                  color: theme.colorScheme.surface,
+                  child: Icon(
+                    Icons.image,
+                    color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  ),
                 ),
               ),
             ),
             title: Text(
               '播客标题 $index',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             subtitle: Text(
               '作者名称 · 2.3万订阅',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.play_circle_outline),
+                  icon: Icon(
+                    Icons.play_circle_outline,
+                    color: theme.colorScheme.primary,
+                  ),
                   onPressed: () {
                     controller.setCurrentPodcast({
                       'id': 'favorite_$index',
@@ -75,13 +85,15 @@ class FavoritesPage extends GetView<PodcastController> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.favorite),
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.red,
                   onPressed: () {
                     // TODO: 取消收藏
                     Get.snackbar(
                       '成功',
                       '已取消收藏',
                       snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: theme.colorScheme.surface,
+                      colorText: theme.colorScheme.onSurface,
                     );
                   },
                 ),

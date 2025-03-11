@@ -9,18 +9,21 @@ class HistoryPage extends GetView<PodcastController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           '收听历史',
           style: TextStyle(
-            color: Colors.black,
+            color: theme.colorScheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.scaffoldBackgroundColor,
         elevation: 0,
+        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
         actions: [
           TextButton(
             onPressed: () {
@@ -29,9 +32,16 @@ class HistoryPage extends GetView<PodcastController> {
                 '成功',
                 '已清空历史记录',
                 snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: theme.colorScheme.surface,
+                colorText: theme.colorScheme.onSurface,
               );
             },
-            child: const Text('清空'),
+            child: Text(
+              '清空',
+              style: TextStyle(
+                color: theme.colorScheme.primary,
+              ),
+            ),
           ),
         ],
       ),
@@ -51,30 +61,37 @@ class HistoryPage extends GetView<PodcastController> {
                 errorWidget: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[200],
-                  child: const Icon(Icons.image, color: Colors.grey),
+                  color: theme.colorScheme.surface,
+                  child: Icon(
+                    Icons.image,
+                    color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  ),
                 ),
               ),
             ),
             title: Text(
               '播客标题 $index',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             subtitle: Text(
               '作者名称 · 2小时前',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.play_circle_outline),
+                  icon: Icon(
+                    Icons.play_circle_outline,
+                    color: theme.colorScheme.primary,
+                  ),
                   onPressed: () {
                     controller.setCurrentPodcast({
                       'id': 'history_$index',
@@ -87,13 +104,18 @@ class HistoryPage extends GetView<PodcastController> {
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline),
+                  icon: Icon(
+                    Icons.delete_outline,
+                    color: theme.colorScheme.error,
+                  ),
                   onPressed: () {
                     // TODO: 删除单条历史记录
                     Get.snackbar(
                       '成功',
                       '已删除该条历史记录',
                       snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: theme.colorScheme.surface,
+                      colorText: theme.colorScheme.onSurface,
                     );
                   },
                 ),

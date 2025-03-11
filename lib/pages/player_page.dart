@@ -9,6 +9,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
   const PlayerPage({super.key});
 
   void _showPlaylistBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -16,7 +17,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
       builder: (context) => Container(
         height: MediaQuery.of(context).size.height * 0.7,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -28,7 +29,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
               height: 4,
               margin: const EdgeInsets.only(top: 10, bottom: 20),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -37,11 +38,12 @@ class PlayerPage extends GetView<AudioPlayerController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     '播放列表',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   GetX<AudioPlayerController>(
@@ -49,7 +51,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                       '${controller.currentIndex.value + 1}/${controller.playlistUrls.length}',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -80,8 +82,11 @@ class PlayerPage extends GetView<AudioPlayerController> {
                               errorWidget: Container(
                                 width: 50,
                                 height: 50,
-                                color: Colors.grey[200],
-                                child: const Icon(Icons.image, color: Colors.grey),
+                                color: theme.colorScheme.surface,
+                                child: Icon(
+                                  Icons.image,
+                                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                                ),
                               ),
                             ),
                           ),
@@ -89,20 +94,20 @@ class PlayerPage extends GetView<AudioPlayerController> {
                             track['title']!,
                             style: TextStyle(
                               fontWeight: isCurrentTrack ? FontWeight.bold : FontWeight.normal,
-                              color: isCurrentTrack ? Theme.of(context).colorScheme.primary : null,
+                              color: isCurrentTrack ? theme.colorScheme.primary : theme.colorScheme.onSurface,
                             ),
                           ),
                           subtitle: Text(
                             track['author']!,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Colors.grey[600],
-                                ),
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            ),
                           ),
                           trailing: isCurrentTrack
                               ? GetX<AudioPlayerController>(
                                   builder: (controller) => Icon(
                                     controller.isPlaying.value ? Icons.pause_circle_filled : Icons.play_circle_filled,
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color: theme.colorScheme.primary,
                                   ),
                                 )
                               : null,
@@ -124,12 +129,13 @@ class PlayerPage extends GetView<AudioPlayerController> {
   }
 
   void _showVolumeBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -143,18 +149,19 @@ class PlayerPage extends GetView<AudioPlayerController> {
               height: 4,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   '音量控制',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 GetX<AudioPlayerController>(
@@ -162,7 +169,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     '${(controller.volume.value * 100).toInt()}%',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey[600],
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
                     ),
                   ),
                 ),
@@ -179,12 +186,19 @@ class PlayerPage extends GetView<AudioPlayerController> {
                             ? Icons.volume_down
                             : Icons.volume_up,
                     size: 24,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: theme.colorScheme.primary,
                   ),
                   Expanded(
-                    child: Slider(
-                      value: controller.volume.value,
-                      onChanged: controller.setVolume,
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: theme.colorScheme.primary,
+                        inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.3),
+                        thumbColor: theme.colorScheme.primary,
+                      ),
+                      child: Slider(
+                        value: controller.volume.value,
+                        onChanged: controller.setVolume,
+                      ),
                     ),
                   ),
                 ],
@@ -205,12 +219,13 @@ class PlayerPage extends GetView<AudioPlayerController> {
   }
 
   void _showSleepTimerBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(20),
           ),
@@ -224,15 +239,16 @@ class PlayerPage extends GetView<AudioPlayerController> {
               height: 4,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: theme.dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const Text(
+            Text(
               '睡眠定时器',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 20),
@@ -254,23 +270,47 @@ class PlayerPage extends GetView<AudioPlayerController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('自定义时间：'),
+                Text(
+                  '自定义时间：',
+                  style: TextStyle(
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
                 const SizedBox(width: 10),
                 GetX<AudioPlayerController>(
-                  builder: (controller) => DropdownButton<int>(
-                    value: controller.sleepTimerMinutes.value > 0 ? controller.sleepTimerMinutes.value : 30,
-                    items: List.generate(12, (index) {
-                      final minutes = (index + 1) * 15;
-                      return DropdownMenuItem(
-                        value: minutes,
-                        child: Text('$minutes分钟'),
-                      );
-                    }),
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.setSleepTimer(value);
-                      }
-                    },
+                  builder: (controller) => Theme(
+                    data: Theme.of(context).copyWith(
+                      dropdownMenuTheme: DropdownMenuThemeData(
+                        textStyle: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                    child: DropdownButton<int>(
+                      value: controller.sleepTimerMinutes.value > 0 ? controller.sleepTimerMinutes.value : 30,
+                      items: List.generate(12, (index) {
+                        final minutes = (index + 1) * 15;
+                        return DropdownMenuItem(
+                          value: minutes,
+                          child: Text(
+                            '$minutes分钟',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        );
+                      }),
+                      onChanged: (value) {
+                        if (value != null) {
+                          controller.setSleepTimer(value);
+                        }
+                      },
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      dropdownColor: theme.scaffoldBackgroundColor,
+                    ),
                   ),
                 ),
               ],
@@ -282,8 +322,17 @@ class PlayerPage extends GetView<AudioPlayerController> {
   }
 
   Widget _buildTimerButton(String label, BuildContext context) {
+    final theme = Theme.of(context);
     return GetX<AudioPlayerController>(
       builder: (controller) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: controller.sleepTimerMinutes.value > 0 && label == '${controller.sleepTimerMinutes.value}分钟'
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surface,
+          foregroundColor: controller.sleepTimerMinutes.value > 0 && label == '${controller.sleepTimerMinutes.value}分钟'
+              ? theme.colorScheme.onPrimary
+              : theme.colorScheme.onSurface,
+        ),
         onPressed: () {
           if (label == '关闭') {
             controller.cancelSleepTimer();
@@ -292,14 +341,6 @@ class PlayerPage extends GetView<AudioPlayerController> {
             controller.setSleepTimer(minutes);
           }
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              controller.sleepTimerMinutes.value > 0 ? Theme.of(context).colorScheme.primary : Colors.grey[300],
-          foregroundColor: controller.sleepTimerMinutes.value > 0 ? Colors.white : Colors.black87,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
         child: Text(label),
       ),
     );
@@ -307,21 +348,16 @@ class PlayerPage extends GetView<AudioPlayerController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('正在播放'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Get.back(),
+        title: Text(
+          '正在播放',
+          style: TextStyle(color: theme.colorScheme.onSurface),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              // TODO: 实现更多选项菜单
-            },
-          ),
-        ],
+        backgroundColor: theme.scaffoldBackgroundColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: theme.colorScheme.onSurface),
       ),
       body: SafeArea(
         child: Column(
@@ -335,8 +371,15 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     width: double.infinity,
                     margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.onSurface.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
@@ -349,8 +392,12 @@ class PlayerPage extends GetView<AudioPlayerController> {
                           errorWidget: Container(
                             width: double.infinity,
                             height: double.infinity,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.image, color: Colors.grey),
+                            color: theme.colorScheme.surface,
+                            child: Icon(
+                              Icons.image,
+                              color: theme.colorScheme.onSurface.withOpacity(0.4),
+                              size: 48,
+                            ),
                           ),
                         ),
                       ),
@@ -364,7 +411,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                           data: controller.visualizationData,
                           width: 200,
                           height: 60,
-                          color: Theme.of(context).primaryColor,
+                          color: theme.colorScheme.primary,
                           isPlaying: controller.isPlaying.value,
                         )),
                   ),
@@ -380,9 +427,10 @@ class PlayerPage extends GetView<AudioPlayerController> {
                   GetX<AudioPlayerController>(
                     builder: (controller) => Text(
                       controller.currentTrack['title']!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -392,7 +440,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                       controller.currentTrack['author']!,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[600],
+                        color: theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -405,15 +453,22 @@ class PlayerPage extends GetView<AudioPlayerController> {
               child: Column(
                 children: [
                   GetX<AudioPlayerController>(
-                    builder: (controller) => Slider(
-                      value: controller.progress.value,
-                      onChanged: (value) {
-                        final duration = controller.duration.value;
-                        final position = Duration(
-                          milliseconds: (value * duration.inMilliseconds).toInt(),
-                        );
-                        controller.seek(position);
-                      },
+                    builder: (controller) => SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: theme.colorScheme.primary,
+                        inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.3),
+                        thumbColor: theme.colorScheme.primary,
+                      ),
+                      child: Slider(
+                        value: controller.progress.value,
+                        onChanged: (value) {
+                          final duration = controller.duration.value;
+                          final position = Duration(
+                            milliseconds: (value * duration.inMilliseconds).toInt(),
+                          );
+                          controller.seek(position);
+                        },
+                      ),
                     ),
                   ),
                   Padding(
@@ -425,7 +480,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                           builder: (controller) => Text(
                             _formatDuration(controller.position.value),
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
                               fontSize: 12,
                             ),
                           ),
@@ -434,7 +489,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                           builder: (controller) => Text(
                             _formatDuration(controller.duration.value),
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
                               fontSize: 12,
                             ),
                           ),
@@ -455,13 +510,18 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     builder: (controller) => IconButton(
                       icon: Icon(
                         Icons.shuffle,
-                        color: controller.isShuffle.value ? Theme.of(context).colorScheme.primary : null,
+                        color: controller.isShuffle.value
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                       onPressed: controller.toggleShuffle,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.skip_previous),
+                    icon: Icon(
+                      Icons.skip_previous,
+                      color: theme.colorScheme.onSurface,
+                    ),
                     onPressed: controller.playPrevious,
                   ),
                   GetX<AudioPlayerController>(
@@ -469,7 +529,7 @@ class PlayerPage extends GetView<AudioPlayerController> {
                       icon: Icon(
                         controller.isPlaying.value ? Icons.pause_circle_filled : Icons.play_circle_filled,
                         size: 64,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: theme.colorScheme.primary,
                       ),
                       onPressed: () async {
                         if (controller.isPlaying.value) {
@@ -481,14 +541,19 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.skip_next),
+                    icon: Icon(
+                      Icons.skip_next,
+                      color: theme.colorScheme.onSurface,
+                    ),
                     onPressed: controller.playNext,
                   ),
                   GetX<AudioPlayerController>(
                     builder: (controller) => IconButton(
                       icon: Icon(
                         Icons.repeat,
-                        color: controller.isLooping.value ? Theme.of(context).colorScheme.primary : null,
+                        color: controller.isLooping.value
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                       onPressed: controller.toggleLoop,
                     ),
@@ -506,7 +571,9 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     builder: (controller) => IconButton(
                       icon: Icon(
                         controller.isFavorite.value ? Icons.favorite : Icons.favorite_border,
-                        color: controller.isFavorite.value ? Colors.red : null,
+                        color: controller.isFavorite.value
+                            ? theme.colorScheme.error
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                       onPressed: controller.toggleFavorite,
                     ),
@@ -515,25 +582,39 @@ class PlayerPage extends GetView<AudioPlayerController> {
                     builder: (controller) => IconButton(
                       icon: Icon(
                         controller.isDownloaded.value ? Icons.download_done : Icons.download,
-                        color: controller.isDownloaded.value ? Theme.of(context).colorScheme.primary : null,
+                        color: controller.isDownloaded.value
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface.withOpacity(0.6),
                       ),
                       onPressed: controller.toggleDownload,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.playlist_play),
+                    icon: Icon(
+                      Icons.playlist_play,
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
                     onPressed: () => _showPlaylistBottomSheet(context),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.volume_up),
+                    icon: Icon(
+                      Icons.volume_up,
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
                     onPressed: () => _showVolumeBottomSheet(context),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.equalizer),
+                    icon: Icon(
+                      Icons.equalizer,
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
                     onPressed: () => _showEqualizerBottomSheet(context),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.timer),
+                    icon: Icon(
+                      Icons.timer,
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
                     onPressed: () => _showSleepTimerBottomSheet(context),
                   ),
                 ],
@@ -604,9 +685,10 @@ class EqualizerBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: theme.scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(20),
         ),
@@ -620,44 +702,26 @@ class EqualizerBottomSheet extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: theme.dividerColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const Text(
-            '均衡器',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '均衡器',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              const EqualizerPresetButton(),
+            ],
           ),
           const SizedBox(height: 20),
-          // 预设模式
-          const EqualizerPresets(),
-          const SizedBox(height: 20),
-          // 均衡器滑块
           const EqualizerSliders(),
-        ],
-      ),
-    );
-  }
-}
-
-// 均衡器预设按钮组
-class EqualizerPresets extends StatelessWidget {
-  const EqualizerPresets({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          EqualizerPresetButton(label: '默认'),
-          EqualizerPresetButton(label: '流行'),
-          EqualizerPresetButton(label: '摇滚'),
-          EqualizerPresetButton(label: '爵士'),
-          EqualizerPresetButton(label: '古典'),
         ],
       ),
     );
@@ -666,29 +730,77 @@ class EqualizerPresets extends StatelessWidget {
 
 // 均衡器预设按钮
 class EqualizerPresetButton extends GetView<AudioPlayerController> {
-  final String label;
-
-  const EqualizerPresetButton({
-    super.key,
-    required this.label,
-  });
+  const EqualizerPresetButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final presets = ['默认', '流行', '摇滚', '爵士', '古典'];
     return GetX<AudioPlayerController>(
-      builder: (controller) => Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: ElevatedButton(
-          onPressed: () => controller.setEqualizerPreset(label),
-          style: ElevatedButton.styleFrom(
-            backgroundColor:
-                controller.currentPreset.value == label ? Theme.of(context).colorScheme.primary : Colors.grey[300],
-            foregroundColor: controller.currentPreset.value == label ? Colors.white : Colors.black87,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+      builder: (controller) => TextButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context) => Container(
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: theme.dividerColor,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  Text(
+                    '均衡器预设',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ...presets.map(
+                    (preset) => ListTile(
+                      title: Text(
+                        preset,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      trailing: controller.currentPreset.value == preset
+                          ? Icon(
+                              Icons.check,
+                              color: theme.colorScheme.primary,
+                            )
+                          : null,
+                      onTap: () {
+                        controller.setEqualizerPreset(preset);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
+          );
+        },
+        child: Text(
+          controller.currentPreset.value,
+          style: TextStyle(
+            color: theme.colorScheme.primary,
           ),
-          child: Text(label),
         ),
       ),
     );
@@ -720,15 +832,28 @@ class EqualizerSlider extends GetView<AudioPlayerController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final frequencies = ['60Hz', '230Hz', '910Hz', '3.6kHz', '14kHz'];
 
     return GetX<AudioPlayerController>(
       builder: (controller) => Column(
         children: [
-          Text(frequencies[index]),
-          Slider(
-            value: controller.equalizerBands[index],
-            onChanged: (value) => controller.updateEqualizerBand(index, value),
+          Text(
+            frequencies[index],
+            style: TextStyle(
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: theme.colorScheme.primary,
+              inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.3),
+              thumbColor: theme.colorScheme.primary,
+            ),
+            child: Slider(
+              value: controller.equalizerBands[index],
+              onChanged: (value) => controller.updateEqualizerBand(index, value),
+            ),
           ),
         ],
       ),

@@ -7,11 +7,10 @@ class AudioPlayerPage extends GetView<AudioPlayerController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('音频播放'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: Padding(
@@ -30,38 +29,53 @@ class AudioPlayerPage extends GetView<AudioPlayerController> {
                   ),
                   fit: BoxFit.cover,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.shadowColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 32),
             // 标题
-            const Text(
+            Text(
               '示例音频',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 8),
             // 作者
-            const Text(
+            Text(
               '作者名称',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey,
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             const SizedBox(height: 32),
             // 进度条
             Obx(() => Column(
                   children: [
-                    Slider(
-                      value: controller.progress.value,
-                      onChanged: (value) {
-                        final position = Duration(
-                          milliseconds: (value * controller.duration.value.inMilliseconds).round(),
-                        );
-                        controller.seek(position);
-                      },
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: theme.colorScheme.primary,
+                        inactiveTrackColor: theme.colorScheme.primary.withOpacity(0.3),
+                        thumbColor: theme.colorScheme.primary,
+                      ),
+                      child: Slider(
+                        value: controller.progress.value,
+                        onChanged: (value) {
+                          final position = Duration(
+                            milliseconds: (value * controller.duration.value.inMilliseconds).round(),
+                          );
+                          controller.seek(position);
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -70,11 +84,15 @@ class AudioPlayerPage extends GetView<AudioPlayerController> {
                         children: [
                           Text(
                             _formatDuration(controller.position.value),
-                            style: const TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            ),
                           ),
                           Text(
                             _formatDuration(controller.duration.value),
-                            style: const TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            ),
                           ),
                         ],
                       ),
@@ -84,6 +102,10 @@ class AudioPlayerPage extends GetView<AudioPlayerController> {
             const SizedBox(height: 32),
             // 测试按钮
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.onPrimary,
+              ),
               onPressed: () {
                 controller.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
               },
@@ -95,11 +117,13 @@ class AudioPlayerPage extends GetView<AudioPlayerController> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.repeat),
+                  icon: Icon(
+                    Icons.repeat,
+                    color: theme.colorScheme.primary,
+                  ),
                   onPressed: () {
                     controller.setLoopMode(!controller.isLooping.value);
                   },
-                  color: controller.isLooping.value ? Theme.of(context).primaryColor : null,
                 ),
                 IconButton(
                   icon: const Icon(Icons.skip_previous),
