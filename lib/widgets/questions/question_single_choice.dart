@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Choice {
   final String title;
@@ -75,7 +76,6 @@ class _QuestionSingleChoiceState extends State<QuestionSingleChoice> {
               ],
             ),
           ),
-     
       ],
     );
   }
@@ -105,7 +105,7 @@ class _QuestionSingleChoiceState extends State<QuestionSingleChoice> {
         ),
         child: Row(
           children: [
-            Expanded(
+            Flexible(
               child: Text(
                 choice.title,
                 style: TextStyle(
