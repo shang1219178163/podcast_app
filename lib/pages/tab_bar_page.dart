@@ -15,7 +15,7 @@ class TabBarPage extends GetView<NTabBarController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: Obx(
         () => IndexedStack(
           index: controller.selectedIndex.value,
@@ -30,7 +30,7 @@ class TabBarPage extends GetView<NTabBarController> {
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           currentIndex: controller.selectedIndex.value,
-          onTap: controller.changePage,
+          onTap: controller.changeNav,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: theme.colorScheme.primary,
           unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
@@ -45,28 +45,7 @@ class TabBarPage extends GetView<NTabBarController> {
             fontWeight: FontWeight.normal,
             color: theme.colorScheme.onSurface.withOpacity(0.6),
           ),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: '首页',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore_outlined),
-              activeIcon: Icon(Icons.explore),
-              label: '发现',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.subscriptions_outlined),
-              activeIcon: Icon(Icons.subscriptions),
-              label: '订阅',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: '我的',
-            ),
-          ],
+          items: controller.items,
         ),
       ),
     );

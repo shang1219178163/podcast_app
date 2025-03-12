@@ -7,12 +7,17 @@ import 'app_theme.dart';
 class ThemeProvider extends GetxController {
   static ThemeProvider get to => Get.find();
 
-  // 主题模式
+  // 存储键
   static const String _themeKey = 'theme_mode';
+  static const String _colorKey = 'theme_color';
 
   // 主题模式状态
   final _themeMode = ThemeMode.system.obs;
   ThemeMode get themeMode => _themeMode.value;
+
+  // 主题颜色状态
+  final Rx<Color> _primaryColor = const Color(0xFF07C160).obs;
+  Color get primaryColor => _primaryColor.value;
 
   // 主题变化回调
   VoidCallback? onThemeChanged;
@@ -30,6 +35,7 @@ class ThemeProvider extends GetxController {
     super.onInit();
     // 读取持久化的主题设置
     _loadThemeMode();
+    _loadPrimaryColor();
     // 监听系统主题变化
     SchedulerBinding.instance.platformDispatcher.onPlatformBrightnessChanged = () {
       if (_themeMode.value == ThemeMode.system) {
@@ -39,6 +45,11 @@ class ThemeProvider extends GetxController {
 
     // 监听主题模式变化
     ever(_themeMode, (_) {
+      _applyTheme();
+    });
+
+    // 监听主题颜色变化
+    ever(_primaryColor, (_) {
       _applyTheme();
     });
   }
@@ -59,8 +70,14 @@ class ThemeProvider extends GetxController {
           break;
       }
     }
-    // 应用主题
-    _applyTheme();
+  }
+
+  // 加载主题颜色
+  void _loadPrimaryColor() {
+    final int? savedColor = StoreManager.getInt(_colorKey);
+    if (savedColor != null) {
+      _primaryColor.value = Color(savedColor);
+    }
   }
 
   // 保存主题设置
@@ -68,10 +85,30 @@ class ThemeProvider extends GetxController {
     await StoreManager.setString(_themeKey, mode.name);
   }
 
+  // 保存主题颜色
+  Future<void> _savePrimaryColor(Color color) async {
+    await StoreManager.setInt(_colorKey, color.value);
+  }
+
   // 应用主题
   void _applyTheme() {
+    // 创建自定义主题
+    final lightTheme = AppTheme.lightTheme.copyWith(
+      colorScheme: AppTheme.lightTheme.colorScheme.copyWith(
+        primary: _primaryColor.value,
+        secondary: _primaryColor.value,
+      ),
+    );
+
+    final darkTheme = AppTheme.darkTheme.copyWith(
+      colorScheme: AppTheme.darkTheme.colorScheme.copyWith(
+        primary: _primaryColor.value,
+        secondary: _primaryColor.value,
+      ),
+    );
+
     Get.changeThemeMode(_themeMode.value);
-    Get.changeTheme(isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme);
+    Get.changeTheme(isDarkMode ? darkTheme : lightTheme);
     onThemeChanged?.call();
     update();
   }
@@ -96,8 +133,21 @@ class ThemeProvider extends GetxController {
     }
   }
 
+  // 设置主题颜色
+  Future<void> setPrimaryColor(Color color) async {
+    if (_primaryColor.value != color) {
+      _primaryColor.value = color;
+      await _savePrimaryColor(color);
+    }
+  }
+
   // 重置为系统主题
   Future<void> resetToSystem() async {
     await setThemeMode(ThemeMode.system);
+  }
+
+  // 重置为默认颜色
+  Future<void> resetToDefaultColor() async {
+    await setPrimaryColor(const Color(0xFF07C160));
   }
 }

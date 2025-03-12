@@ -7,6 +7,7 @@ import '../widgets/hospital_stats_card.dart';
 import '../widgets/hospital_guide_card.dart';
 import '../widgets/hospital_quick_action.dart';
 import '../utils/R.dart';
+import '../controllers/tab_bar_controller.dart';
 
 // 自定义梯形裁剪器
 class HospitalTrapezoidClipper extends CustomClipper<Path> {
@@ -53,7 +54,33 @@ class HospitalManagementPage extends StatelessWidget {
           _buildGuideSection(theme),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(theme),
+      bottomNavigationBar: GetBuilder<NTabBarController>(
+        builder: (controller) => BottomNavigationBar(
+          currentIndex: controller.selectedIndex.value,
+          onTap: (index) => controller.changeNav(index),
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '首页',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: '消息',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: '患者',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: '我的',
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -228,33 +255,6 @@ class HospitalManagementPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: theme.colorScheme.onSurface,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomNavigationBar(ThemeData theme) {
-    return BottomNavigationBar(
-      currentIndex: 0,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: const Color(0xFF2196F3),
-      unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: '首页',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: '消息',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.people),
-          label: '患者',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: '我的',
         ),
       ],
     );

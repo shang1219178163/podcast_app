@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podcast_app/constants/store_key.dart';
+import 'package:podcast_app/theme/theme_provider.dart';
 import 'package:podcast_app/utils/store_manager.dart';
+import 'constants/store_key.dart';
 import 'routes/app_pages.dart';
 import 'bindings/initial_binding.dart';
 import 'package:podcast_app/theme/app_theme.dart';
-import 'theme/theme_provider.dart';
 import 'controllers/settings_controller.dart';
 import 'controllers/player_controller.dart';
+import 'controllers/tab_bar_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 初始化存储
   await StoreManager.init();
 
-  // 初始化依赖注入
+  // 初始化控制器
   Get.put(ThemeProvider());
   Get.put(SettingsController());
   Get.put(PlayerController());
+  Get.put(NTabBarController());
 
   runApp(const MyApp());
 }
