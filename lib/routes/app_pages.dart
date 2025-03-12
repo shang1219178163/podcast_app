@@ -9,6 +9,7 @@ import '../controllers/category_controller.dart';
 import '../controllers/profile_controller.dart';
 import '../controllers/subscription_controller.dart';
 import '../controllers/chat_controller.dart';
+import '../controllers/survey_controller.dart';
 
 import '../pages/player_page.dart';
 import '../pages/tab_bar_page.dart';
@@ -35,6 +36,8 @@ import '../pages/messages_page.dart';
 import '../pages/audio_player_page.dart';
 import '../pages/chat_page.dart';
 import '../pages/test_page.dart';
+import '../pages/hospital_management_page.dart';
+import '../pages/survey_page.dart';
 import '../bindings/discover_binding.dart';
 
 part 'app_routes.dart';
@@ -173,6 +176,17 @@ class AppPages {
       name: AppRoute.test,
       page: () => const TestPage(),
       binding: null,
+    ),
+    GetPage(
+      name: AppRoute.hospitalManagement,
+      page: () => const HospitalManagementPage(),
+    ),
+    GetPage(
+      name: AppRoute.survey,
+      page: () => const SurveyPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => SurveyController());
+      }),
     ),
   ];
 }

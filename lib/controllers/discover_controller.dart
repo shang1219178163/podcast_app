@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import '../models/podcast.dart';
-import '../utils/log_util.dart';
+import '../utils/dlog.dart';
 
 class DiscoverController extends GetxController {
   // 路由列表数据
@@ -90,7 +90,7 @@ class DiscoverController extends GetxController {
       currentPage.value = 1;
       hasMore.value = true;
     } catch (e) {
-      LogUtil.e('加载发现页数据失败: $e');
+      DLog.e('加载发现页数据失败: $e');
     } finally {
       isLoading.value = false;
     }
@@ -112,7 +112,7 @@ class DiscoverController extends GetxController {
       currentPage.value++;
       hasMore.value = currentPage.value < 3; // 模拟只有3页数据
     } catch (e) {
-      LogUtil.e('加载更多数据失败: $e');
+      DLog.e('加载更多数据失败: $e');
     } finally {
       isLoading.value = false;
     }

@@ -6,6 +6,7 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: const Color(0xFF07C160),
+ 
     colorScheme: ColorScheme.light(
       primary: const Color(0xFF07C160),
       secondary: const Color(0xFF07C160),
@@ -60,21 +61,24 @@ class AppTheme {
     ],
   );
 
-  static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    primaryColor: const Color(0xFF07C160),
-    colorScheme: const ColorScheme.dark(
-      primary: Color(0xFF07C160),
-      secondary: Color(0xFF07C160),
-      surface: Color(0xFF1C1C1E),
-      background: Color(0xFF000000),
-      error: Colors.red,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: Colors.white,
-      onBackground: Colors.white,
-      onError: Colors.white,
+  static final ThemeData darkTheme = ThemeData.dark().copyWith(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2196F3),
+      brightness: Brightness.dark,
+    ),
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: Colors.transparent,
+    splashColor: Colors.transparent,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        splashFactory: NoSplash.splashFactory,
+      ),
+    ),
+    listTileTheme: const ListTileThemeData(
+      enableFeedback: false,
+    ),
+    cardTheme: const CardTheme(
+      clipBehavior: Clip.none,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF1C1C1E),

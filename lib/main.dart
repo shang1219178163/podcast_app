@@ -34,7 +34,28 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
       title: '播客应用',
-      theme: AppTheme.lightTheme,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2196F3)),
+        useMaterial3: true,
+        // 关闭水波纹效果
+        splashFactory: NoSplash.splashFactory,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        // 自定义按钮主题
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
+          ),
+        ),
+        // 自定义 ListTile 主题
+        listTileTheme: const ListTileThemeData(
+          enableFeedback: false,
+        ),
+        // 自定义 InkWell 主题
+        cardTheme: const CardTheme(
+          clipBehavior: Clip.none,
+        ),
+      ),
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeProvider.to.themeMode,
       initialBinding: InitialBinding(),

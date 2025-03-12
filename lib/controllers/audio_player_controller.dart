@@ -4,7 +4,7 @@ import 'package:audio_session/audio_session.dart';
 import 'dart:math';
 import 'dart:async';
 import 'dart:math' as math;
-import '../utils/log_util.dart';
+import '../utils/dlog.dart';
 
 class AudioPlayerController extends GetxController {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -127,7 +127,7 @@ class AudioPlayerController extends GetxController {
   }
 
   Future<void> _initAudioPlayer() async {
-    LogUtil.i('初始化音频播放器');
+    DLog.i('初始化音频播放器');
     try {
       print('初始化音频播放器');
       // 设置音频会话
@@ -142,11 +142,11 @@ class AudioPlayerController extends GetxController {
         ),
         androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
       ));
-      LogUtil.i('音频会话配置成功');
+      DLog.i('音频会话配置成功');
 
       // 监听播放状态
       _audioPlayer.playerStateStream.listen((state) {
-        LogUtil.d('播放状态变化: ${state.playing}, ${state.processingState}');
+        DLog.d('播放状态变化: ${state.playing}, ${state.processingState}');
         isPlaying.value = state.playing;
         isBuffering.value = state.processingState == ProcessingState.buffering;
 
@@ -177,7 +177,7 @@ class AudioPlayerController extends GetxController {
 
       // 监听总时长
       _audioPlayer.durationStream.listen((dur) {
-        LogUtil.d('音频时长: ${dur?.inSeconds}秒');
+        DLog.d('音频时长: ${dur?.inSeconds}秒');
         duration.value = dur ?? Duration.zero;
       });
 
@@ -199,13 +199,13 @@ class AudioPlayerController extends GetxController {
 
       // 监听播放速度
       _audioPlayer.speedStream.listen((speed) {
-        LogUtil.d('播放速度变化: $speed');
+        DLog.d('播放速度变化: $speed');
         playbackSpeed.value = speed;
       });
 
       // 监听循环状态
       _audioPlayer.loopModeStream.listen((mode) {
-        LogUtil.d('循环模式变化: $mode');
+        DLog.d('循环模式变化: $mode');
         isLooping.value = mode != LoopMode.off;
       });
 
@@ -213,8 +213,8 @@ class AudioPlayerController extends GetxController {
       _audioPlayer.playbackEventStream.listen(
         (event) {},
         onError: (Object e, StackTrace st) {
-          LogUtil.e('播放错误: $e');
-          LogUtil.e('错误堆栈: $st');
+          DLog.e('播放错误: $e');
+          DLog.e('错误堆栈: $st');
           Get.snackbar(
             '错误',
             '播放出错: $e',
@@ -223,9 +223,9 @@ class AudioPlayerController extends GetxController {
         },
       );
 
-      LogUtil.i('音频播放器初始化完成');
+      DLog.i('音频播放器初始化完成');
     } catch (e) {
-      LogUtil.e('初始化错误: $e');
+      DLog.e('初始化错误: $e');
       Get.snackbar(
         '错误',
         '播放器初始化失败: $e',
@@ -235,7 +235,7 @@ class AudioPlayerController extends GetxController {
   }
 
   Future<void> switchTrack(int index) async {
-    LogUtil.d('切换到音频: $index');
+    DLog.d('切换到音频: $index');
     try {
       print('切换到音频: $index');
       if (index != currentIndex.value) {
@@ -252,7 +252,7 @@ class AudioPlayerController extends GetxController {
         }
       }
     } catch (e) {
-      LogUtil.e('切换音频错误: $e');
+      DLog.e('切换音频错误: $e');
       Get.snackbar(
         '错误',
         '切换音频失败: $e',
@@ -262,15 +262,15 @@ class AudioPlayerController extends GetxController {
   }
 
   Future<void> play(String url) async {
-    LogUtil.d('开始播放音频: $url');
+    DLog.d('开始播放音频: $url');
     try {
       print('开始播放音频: $url');
       await _audioPlayer.setUrl(url);
-      LogUtil.d('音频 URL 设置成功');
+      DLog.d('音频 URL 设置成功');
       await _audioPlayer.play();
-      LogUtil.i('开始播放');
+      DLog.i('开始播放');
     } catch (e) {
-      LogUtil.e('播放错误: $e');
+      DLog.e('播放错误: $e');
       Get.snackbar(
         '错误',
         '音频播放失败: $e',

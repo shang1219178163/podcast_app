@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/store_manager.dart';
-import '../utils/log_util.dart';
+import '../utils/dlog.dart';
 
 class SettingsController extends GetxController {
   static const String _tag = 'SettingsController';
@@ -23,12 +23,12 @@ class SettingsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    LogUtil.i('[$_tag] Initializing settings controller');
+    DLog.i('[$_tag] Initializing settings controller');
     loadSettings();
   }
 
   Future<void> loadSettings() async {
-    LogUtil.d('[$_tag] Loading settings');
+    DLog.d('[$_tag] Loading settings');
     // 加载播放设置
     volume.value = StoreManager.getDouble('volume') ?? 1.0;
     playbackSpeed.value = StoreManager.getDouble('playbackSpeed') ?? 1.0;
@@ -45,11 +45,11 @@ class SettingsController extends GetxController {
 
     // 计算缓存大小
     await calculateCacheSize();
-    LogUtil.d('[$_tag] Settings loaded successfully');
+    DLog.d('[$_tag] Settings loaded successfully');
   }
 
   Future<void> saveSettings() async {
-    LogUtil.d('[$_tag] Saving settings');
+    DLog.d('[$_tag] Saving settings');
     try {
       // 保存播放设置
       await StoreManager.setDouble('volume', volume.value);
@@ -64,20 +64,20 @@ class SettingsController extends GetxController {
       // 保存其他设置
       await StoreManager.setBool('darkMode', darkMode.value);
       await StoreManager.setBool('autoPlay', autoPlay.value);
-      LogUtil.i('[$_tag] Settings saved successfully');
+      DLog.i('[$_tag] Settings saved successfully');
     } catch (e) {
-      LogUtil.e('[$_tag] Error saving settings: $e');
+      DLog.e('[$_tag] Error saving settings: $e');
     }
   }
 
   Future<void> calculateCacheSize() async {
-    LogUtil.d('[$_tag] Calculating cache size');
+    DLog.d('[$_tag] Calculating cache size');
     // TODO: 实现缓存大小计算
     cacheSize.value = '0MB';
   }
 
   Future<void> clearCache() async {
-    LogUtil.d('[$_tag] Clearing cache');
+    DLog.d('[$_tag] Clearing cache');
     try {
       // TODO: 实现缓存清理
       await calculateCacheSize();
@@ -86,14 +86,14 @@ class SettingsController extends GetxController {
         '缓存已清理',
         snackPosition: SnackPosition.BOTTOM,
       );
-      LogUtil.i('[$_tag] Cache cleared successfully');
+      DLog.i('[$_tag] Cache cleared successfully');
     } catch (e) {
-      LogUtil.e('[$_tag] Error clearing cache: $e');
+      DLog.e('[$_tag] Error clearing cache: $e');
     }
   }
 
   Future<void> logout() async {
-    LogUtil.d('[$_tag] Showing logout confirmation dialog');
+    DLog.d('[$_tag] Showing logout confirmation dialog');
     await Get.dialog(
       AlertDialog(
         title: const Text('退出登录'),
@@ -101,14 +101,14 @@ class SettingsController extends GetxController {
         actions: [
           TextButton(
             onPressed: () {
-              LogUtil.d('[$_tag] Logout cancelled');
+              DLog.d('[$_tag] Logout cancelled');
               Get.back();
             },
             child: const Text('取消'),
           ),
           TextButton(
             onPressed: () {
-              LogUtil.i('[$_tag] User confirmed logout');
+              DLog.i('[$_tag] User confirmed logout');
               Get.back();
               // TODO: 执行退出登录操作
               Get.offAllNamed('/login');

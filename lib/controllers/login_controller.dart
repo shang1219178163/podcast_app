@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import '../utils/store_manager.dart';
-import '../utils/log_util.dart';
+import '../utils/dlog.dart';
 import '../constants/store_key.dart';
 
 class LoginController extends GetxController {
@@ -13,7 +13,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    LogUtil.i('Initializing LoginController');
+    DLog.i('Initializing LoginController');
     checkLoginStatus();
     // 从本地存储加载协议勾选状态
     agreedToTerms.value = StoreManager.getBool(StoreKey.agreedToTerms.name) ?? false;
@@ -21,15 +21,15 @@ class LoginController extends GetxController {
 
   // 检查登录状态
   Future<void> checkLoginStatus() async {
-    LogUtil.d('Checking login status');
+    DLog.d('Checking login status');
     isLoggedIn.value = StoreManager.getBool(StoreKey.isLoggedIn.name) ?? false;
-    LogUtil.d('Login status: ${isLoggedIn.value}');
+    DLog.d('Login status: ${isLoggedIn.value}');
   }
 
   // 微信登录
   Future<void> loginWithWeChat() async {
     if (!agreedToTerms.value) {
-      LogUtil.w('User has not agreed to terms');
+      DLog.w('User has not agreed to terms');
       Get.snackbar(
         '提示',
         '请先同意用户协议和隐私政策',
@@ -39,7 +39,7 @@ class LoginController extends GetxController {
     }
 
     try {
-      LogUtil.i('Attempting WeChat login');
+      DLog.i('Attempting WeChat login');
       isLoading.value = true;
       // TODO: 实现微信登录
       await Future.delayed(const Duration(seconds: 2)); // 模拟登录过程
@@ -50,11 +50,11 @@ class LoginController extends GetxController {
       await StoreManager.setString(StoreKey.userToken.name, 'wechat_token');
 
       isLoggedIn.value = true;
-      LogUtil.i('Login successful');
+      DLog.i('Login successful');
 
       await Get.offAllNamed(AppRoute.tabBar);
     } catch (e) {
-      LogUtil.e('Login failed: $e');
+      DLog.e('Login failed: $e');
       Get.snackbar(
         '错误',
         '登录失败，请重试',
@@ -68,7 +68,7 @@ class LoginController extends GetxController {
   // 手机号登录
   Future<void> loginWithPhone() async {
     if (!agreedToTerms.value) {
-      LogUtil.w('User has not agreed to terms');
+      DLog.w('User has not agreed to terms');
       Get.snackbar(
         '提示',
         '请先同意用户协议和隐私政策',
@@ -78,7 +78,7 @@ class LoginController extends GetxController {
     }
 
     try {
-      LogUtil.i('Attempting phone login');
+      DLog.i('Attempting phone login');
       isLoading.value = true;
       // TODO: 实现手机号登录
       await Future.delayed(const Duration(seconds: 1)); // 模拟登录过程
@@ -89,11 +89,11 @@ class LoginController extends GetxController {
       await StoreManager.setString(StoreKey.userToken.name, 'phone_token');
 
       isLoggedIn.value = true;
-      LogUtil.i('Login successful');
+      DLog.i('Login successful');
 
       await Get.offAllNamed(AppRoute.tabBar);
     } catch (e) {
-      LogUtil.e('Login failed: $e');
+      DLog.e('Login failed: $e');
       Get.snackbar(
         '错误',
         '登录失败，请重试',
@@ -107,14 +107,14 @@ class LoginController extends GetxController {
   // 退出登录
   Future<void> logout() async {
     try {
-      LogUtil.i('Logging out');
+      DLog.i('Logging out');
       isLoading.value = true;
       await StoreManager.clearLoginRequiredData();
       isLoggedIn.value = false;
-      LogUtil.i('Logout successful');
+      DLog.i('Logout successful');
       await Get.offAllNamed(AppRoute.login);
     } catch (e) {
-      LogUtil.e('Logout failed: $e');
+      DLog.e('Logout failed: $e');
       Get.snackbar(
         '错误',
         '退出失败，请重试',
@@ -127,7 +127,7 @@ class LoginController extends GetxController {
 
   // 切换用户协议同意状态
   void toggleAgreement() {
-    LogUtil.d('Toggling agreement status');
+    DLog.d('Toggling agreement status');
     agreedToTerms.value = !agreedToTerms.value;
     // 保存协议勾选状态到本地存储
     StoreManager.setBool(StoreKey.agreedToTerms.name, agreedToTerms.value);
@@ -135,13 +135,13 @@ class LoginController extends GetxController {
 
   // 打开用户协议
   void openUserAgreement() {
-    LogUtil.d('Opening user agreement');
+    DLog.d('Opening user agreement');
     Get.toNamed(AppRoute.userAgreement);
   }
 
   // 打开隐私政策
   void openPrivacyPolicy() {
-    LogUtil.d('Opening privacy policy');
+    DLog.d('Opening privacy policy');
     Get.toNamed(AppRoute.privacyPolicy);
   }
 }

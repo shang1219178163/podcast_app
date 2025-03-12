@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../models/chat_message.dart';
-import '../utils/log_util.dart';
+import '../utils/dlog.dart';
 
 class ChatController extends GetxController {
   final String chatId;
@@ -37,7 +37,7 @@ class ChatController extends GetxController {
   Future<void> loadMessages() async {
     try {
       // TODO: 从服务器加载消息
-      LogUtil.d('加载聊天消息');
+      DLog.d('加载聊天消息');
       // 模拟加载消息
       await Future.delayed(const Duration(seconds: 1));
       messages.value = List.generate(
@@ -53,7 +53,7 @@ class ChatController extends GetxController {
         ),
       );
     } catch (e) {
-      LogUtil.e('加载消息失败: $e');
+      DLog.e('加载消息失败: $e');
     }
   }
 
@@ -71,9 +71,9 @@ class ChatController extends GetxController {
       );
       messages.insert(0, message);
       // TODO: 发送消息到服务器
-      LogUtil.d('发送文本消息: $text');
+      DLog.d('发送文本消息: $text');
     } catch (e) {
-      LogUtil.e('发送消息失败: $e');
+      DLog.e('发送消息失败: $e');
     }
   }
 
@@ -91,9 +91,9 @@ class ChatController extends GetxController {
       );
       messages.insert(0, message);
       // TODO: 上传语音文件到服务器
-      LogUtil.d('发送语音消息: $voicePath, 时长: $duration');
+      DLog.d('发送语音消息: $voicePath, 时长: $duration');
     } catch (e) {
-      LogUtil.e('发送语音消息失败: $e');
+      DLog.e('发送语音消息失败: $e');
     }
   }
 
@@ -110,9 +110,9 @@ class ChatController extends GetxController {
       );
       messages.insert(0, message);
       // TODO: 上传图片到服务器
-      LogUtil.d('发送图片消息: $imagePath');
+      DLog.d('发送图片消息: $imagePath');
     } catch (e) {
-      LogUtil.e('发送图片消息失败: $e');
+      DLog.e('发送图片消息失败: $e');
     }
   }
 
@@ -129,15 +129,15 @@ class ChatController extends GetxController {
       );
       messages.insert(0, message);
       // TODO: 发送消息到服务器
-      LogUtil.d('发送表情消息: $emoji');
+      DLog.d('发送表情消息: $emoji');
     } catch (e) {
-      LogUtil.e('发送表情消息失败: $e');
+      DLog.e('发送表情消息失败: $e');
     }
   }
 
   void onTapAvatar(String userId) {
     // TODO: 跳转到用户资料页
-    LogUtil.d('点击头像: $userId');
+    DLog.d('点击头像: $userId');
   }
 
   void onTapMessage(ChatMessage message) {
@@ -149,11 +149,11 @@ class ChatController extends GetxController {
     switch (message.type) {
       case MessageType.image:
         // TODO: 查看大图
-        LogUtil.d('查看图片: ${message.content}');
+        DLog.d('查看图片: ${message.content}');
         break;
       case MessageType.voice:
         // TODO: 播放语音
-        LogUtil.d('播放语音: ${message.content}');
+        DLog.d('播放语音: ${message.content}');
         break;
       default:
         break;
@@ -168,13 +168,13 @@ class ChatController extends GetxController {
 
   void replyMessage(ChatMessage message) {
     // TODO: 实现回复功能
-    LogUtil.d('回复消息: ${message.content}');
+    DLog.d('回复消息: ${message.content}');
   }
 
   void deleteMessage(ChatMessage message) {
     messages.removeWhere((m) => m.id == message.id);
     // TODO: 从服务器删除消息
-    LogUtil.d('删除消息: ${message.id}');
+    DLog.d('删除消息: ${message.id}');
   }
 
   void startMultiSelect(ChatMessage message) {
@@ -201,25 +201,25 @@ class ChatController extends GetxController {
 
   void forwardSelectedMessages() {
     // TODO: 实现转发功能
-    LogUtil.d('转发选中的消息: $selectedMessages');
+    DLog.d('转发选中的消息: $selectedMessages');
     cancelMultiSelect();
   }
 
   void deleteSelectedMessages() {
     messages.removeWhere((m) => selectedMessages.contains(m.id));
     // TODO: 从服务器删除消息
-    LogUtil.d('删除选中的消息: $selectedMessages');
+    DLog.d('删除选中的消息: $selectedMessages');
     cancelMultiSelect();
   }
 
   void addMember() {
     // TODO: 实现添加成员功能
-    LogUtil.d('添加成员');
+    DLog.d('添加成员');
   }
 
   void searchMessages() {
     // TODO: 实现搜索功能
-    LogUtil.d('搜索消息');
+    DLog.d('搜索消息');
   }
 
   void clearMessages() {
@@ -236,7 +236,7 @@ class ChatController extends GetxController {
             onPressed: () {
               messages.clear();
               // TODO: 从服务器清空消息
-              LogUtil.d('清空聊天记录');
+              DLog.d('清空聊天记录');
               Get.back();
             },
             child: const Text('确定'),
@@ -248,6 +248,6 @@ class ChatController extends GetxController {
 
   void readMessage(ChatMessage message) {
     // TODO: 实现文本朗读功能
-    LogUtil.d('朗读消息: ${message.content}');
+    DLog.d('朗读消息: ${message.content}');
   }
 }

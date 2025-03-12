@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
 
-class LogUtil {
+class DLog {
   // 是否启用日志打印
   static bool _enableLog = true;
 
@@ -26,22 +26,22 @@ class LogUtil {
   }
 
   // 打印调试日志
-  static void d(String message) {
+  static void d(dynamic message) {
     _printLog('DEBUG', message, _ansiBlue, _webBlue);
   }
 
   // 打印信息日志
-  static void i(String message) {
+  static void i(dynamic message) {
     _printLog('INFO', message, _ansiGreen, _webGreen);
   }
 
   // 打印警告日志
-  static void w(String message) {
+  static void w(dynamic message) {
     _printLog('WARN', message, _ansiYellow, _webYellow);
   }
 
   // 打印错误日志
-  static void e(String message) {
+  static void e(dynamic message) {
     _printLog('ERROR', message, _ansiRed, _webRed);
   }
 
@@ -83,7 +83,7 @@ class LogUtil {
   }
 
   // 内部打印方法
-  static void _printLog(String level, String message, String ansiColor, String webColor) {
+  static void _printLog(String level, dynamic message, String ansiColor, String webColor) {
     if (!_enableLog) return;
     if (!kDebugMode) return;
 

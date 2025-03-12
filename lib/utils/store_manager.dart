@@ -1,6 +1,7 @@
+import 'package:podcast_app/utils/dlog.dart';
+
 import '../constants/store_key.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'log_util.dart';
 
 class StoreManager {
   static final StoreManager _instance = StoreManager._internal();
@@ -13,7 +14,7 @@ class StoreManager {
   StoreManager._internal();
 
   static Future<void> init() async {
-    LogUtil.i('Initializing StoreManager');
+    DLog.i('Initializing StoreManager');
     _prefs = await SharedPreferences.getInstance();
   }
 
@@ -30,86 +31,86 @@ class StoreManager {
   // 检查键是否存在
   static bool containsKey(String key) {
     final exists = _prefs?.containsKey(key) ?? false;
-    LogUtil.d('Checking if $key exists: $exists');
+    DLog.d('Checking if $key exists: $exists');
     return exists;
   }
 
   // 获取字符串
   static String? getString(String key) {
     final value = _prefs?.getString(key);
-    LogUtil.d('Getting string for $key: $value');
+    DLog.d('Getting string for $key: $value');
     return value;
   }
 
   // 设置字符串
   static Future<bool> setString(String key, String value) async {
-    LogUtil.d('Setting string for $key: $value');
+    DLog.d('Setting string for $key: $value');
     return await _prefs?.setString(key, value) ?? false;
   }
 
   // 获取布尔值
   static bool? getBool(String key) {
     final value = _prefs?.getBool(key);
-    LogUtil.d('Getting bool for $key: $value');
+    DLog.d('Getting bool for $key: $value');
     return value;
   }
 
   // 设置布尔值
   static Future<bool> setBool(String key, bool value) async {
-    LogUtil.d('Setting bool for $key: $value');
+    DLog.d('Setting bool for $key: $value');
     return await _prefs?.setBool(key, value) ?? false;
   }
 
   // 获取整数
   static int? getInt(String key) {
     final value = _prefs?.getInt(key);
-    LogUtil.d('Getting int for $key: $value');
+    DLog.d('Getting int for $key: $value');
     return value;
   }
 
   // 设置整数
   static Future<bool> setInt(String key, int value) async {
-    LogUtil.d('Setting int for $key: $value');
+    DLog.d('Setting int for $key: $value');
     return await _prefs?.setInt(key, value) ?? false;
   }
 
   // 获取双精度浮点数
   static double? getDouble(String key) {
     final value = _prefs?.getDouble(key);
-    LogUtil.d('Getting double for $key: $value');
+    DLog.d('Getting double for $key: $value');
     return value;
   }
 
   // 设置双精度浮点数
   static Future<bool> setDouble(String key, double value) async {
-    LogUtil.d('Setting double for $key: $value');
+    DLog.d('Setting double for $key: $value');
     return await _prefs?.setDouble(key, value) ?? false;
   }
 
   // 获取字符串列表
   static List<String>? getStringList(String key) {
     final value = _prefs?.getStringList(key);
-    LogUtil.d('Getting string list for $key: $value');
+    DLog.d('Getting string list for $key: $value');
     return value;
   }
 
   // 设置字符串列表
   static Future<bool> setStringList(String key, List<String> value) async {
-    LogUtil.d('Setting string list for $key: $value');
+    DLog.d('Setting string list for $key: $value');
     return await _prefs?.setStringList(key, value) ?? false;
   }
 
   // 获取对象（JSON）
   static dynamic getObject(String key) {
     final String? jsonString = _prefs?.getString(key);
-    LogUtil.d('Getting object for $key: $jsonString');
+    DLog.d('Getting object for $key: $jsonString');
     if (jsonString == null) return null;
     return jsonString;
   }
 
   // 设置对象（JSON）
   static Future<bool> setObject(String key, dynamic value) async {
-    LogUtil.d('Setting object for $key: $value');
+    DLog.d('Setting object for $key: $value');
     if (value == null) {
       return await remove(key);
     }
@@ -118,19 +119,19 @@ class StoreManager {
 
   // 删除指定键
   static Future<bool> remove(String key) async {
-    LogUtil.d('Removing $key');
+    DLog.d('Removing $key');
     return await _prefs?.remove(key) ?? false;
   }
 
   // 清空所有数据
   static Future<bool> clear() async {
-    LogUtil.w('Clearing all data');
+    DLog.w('Clearing all data');
     return await _prefs?.clear() ?? false;
   }
 
   // 清除所有需要登录的数据
   static Future<void> clearLoginRequiredData() async {
-    LogUtil.w('Clearing all login-required data');
+    DLog.w('Clearing all login-required data');
     for (var key in StoreKey.values) {
       if (key.logined) {
         await remove(key.name);
