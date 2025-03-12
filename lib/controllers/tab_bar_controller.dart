@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podcast_app/utils/dlog.dart';
 import 'package:podcast_app/utils/store_manager.dart';
 
 class NTabBarController extends GetxController {

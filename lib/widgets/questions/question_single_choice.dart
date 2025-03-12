@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Choice {
   final String title;
@@ -89,7 +88,7 @@ class _QuestionSingleChoiceState extends State<QuestionSingleChoice> {
         setState(() {
           _selectedValue = choice.title;
         });
-        widget.onChanged?.call(choice.title!);
+        widget.onChanged?.call(choice.title);
         widget.onSelect?.call(true);
       },
       child: Container(

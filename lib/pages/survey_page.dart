@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podcast_app/extension/list_ext.dart';
-import 'package:podcast_app/utils/R.dart';
 import '../controllers/survey_controller.dart';
 import '../widgets/questions/question_container.dart';
 import '../widgets/questions/question_text.dart';
@@ -160,18 +158,12 @@ class _SurveyPageState extends State<SurveyPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     QuestionImageUpload(
-                      images: controller.imageUrls,
+                      initialImages: controller.imageUrls,
                       tip: controller.getTip('4'),
-                      onAddImage: () async {
+                      onImagesChanged: (images) {
                         selectedQuestionIndex.value = 3;
-                        // TODO: 实现图片选择和上传
-                        final url = R.image.urls.randomOne;
-                        if (url == null) {
-                          return;
-                        }
-                        controller.addImage(url);
+                        controller.updateImages(images);
                       },
-                      onRemoveImage: controller.removeImage,
                     ),
                   ],
                 ),

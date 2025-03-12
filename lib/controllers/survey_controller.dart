@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:podcast_app/utils/dlog.dart';
-import '../models/survey_model.dart';
-import 'package:podcast_app/models/question.dart';
 
 class SurveyController extends GetxController {
   final RxString textAnswer = ''.obs;
@@ -35,6 +31,11 @@ class SurveyController extends GetxController {
     if (index >= 0 && index < imageUrls.length) {
       imageUrls.removeAt(index);
     }
+  }
+
+  void updateImages(List<String> images) {
+    imageUrls.clear();
+    imageUrls.addAll(images);
   }
 
   // 服务满意度

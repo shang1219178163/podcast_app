@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 /// 问题类型枚举
 enum QuestionType {

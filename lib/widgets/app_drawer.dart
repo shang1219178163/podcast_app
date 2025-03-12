@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podcast_app/controllers/tab_bar_controller.dart';
-import 'package:podcast_app/utils/dlog.dart';
 import '../constants/app_constants.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/network_image_widget.dart';

@@ -41,6 +41,9 @@ dependencies:
   intl: ^0.19.0
   extended_image: ^9.1.0
   easy_refresh: ^3.4.0
+  wechat_assets_picker: ^9.4.2
+  permission_handler: ^11.0.1
+  device_info_plus: ^9.1.2
 
 
 dev_dependencies:

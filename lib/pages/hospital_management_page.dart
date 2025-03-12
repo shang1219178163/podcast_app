@@ -169,9 +169,9 @@ class HospitalManagementPage extends StatelessWidget {
       children: [
         _buildSectionTitle(theme, '快速发送'),
         const SizedBox(height: 12),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
+          children: [
             HospitalQuickAction(icon: Icons.message, title: '消息'),
             HospitalQuickAction(icon: Icons.assignment, title: '问卷'),
             HospitalQuickAction(icon: Icons.calendar_today, title: '预约'),
@@ -187,8 +187,8 @@ class HospitalManagementPage extends StatelessWidget {
       children: [
         _buildSectionTitle(theme, '数据统计'),
         const SizedBox(height: 12),
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(
               child: HospitalStatsCard(
                 title: '总患者数',
