@@ -29,6 +29,8 @@ abstract class AppRoute {
   static const test = '/test';
   static const hospitalManagement = '/hospital-management';
   static const survey = '/survey';
+  static const customPainterDemo = '/custom-painter-demo';
+  static const doctorDetail = '/doctor-detail';
 
   static List<String> get values => [
         login,
@@ -58,6 +60,8 @@ abstract class AppRoute {
         test,
         hospitalManagement,
         survey,
+        customPainterDemo,
+        doctorDetail,
       ];
 
   static final routes = [

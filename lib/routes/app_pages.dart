@@ -38,6 +38,8 @@ import '../pages/chat_page.dart';
 import '../pages/test_page.dart';
 import '../pages/hospital_management_page.dart';
 import '../pages/survey_page.dart';
+import '../pages/custom_painter_page_demo.dart';
+import '../pages/doctor_detail_page.dart';
 import '../bindings/discover_binding.dart';
 
 part 'app_routes.dart';
@@ -187,6 +189,14 @@ class AppPages {
       binding: BindingsBuilder(() {
         Get.lazyPut(() => SurveyController());
       }),
+    ),
+    GetPage(
+      name: AppRoute.customPainterDemo,
+      page: () => const CustomPainterPageDemo(),
+    ),
+    GetPage(
+      name: AppRoute.doctorDetail,
+      page: () => const DoctorDetailPage(),
     ),
   ];
 }

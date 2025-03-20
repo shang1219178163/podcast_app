@@ -32,6 +32,9 @@ class _RImage {
   /// 占位图
   ImageProvider placeholder({String? package}) => AssetImage("assets/images/img_placeholder.png", package: package);
 
+  /// 医生详情页
+  final doctorDetailPage = _DoctorDetailPage();
+
   /// 网图数组
   final List<String> urls = [
     'https://yl-prescription-share.oss-cn-beijing.aliyuncs.com/test/message/document/1737078692/im/msg/rec/651722246582308864.jpg',
@@ -72,4 +75,12 @@ class _RImage {
     'https://cos.ap-shanghai.myqcloud.com/1380-shanghai-030-sharedv4-03-1303031839/d4a3-1400349613/dd7d-%40J%401B_493001807509893120/af9ecca786dabcd5f8ff1fc2d34c070f.jpg?imageMogr2/',
     'https://cos.ap-shanghai.myqcloud.com/1380-shanghai-030-sharedv4-03-1303031839/d4a3-1400349613/dd7d-%40J%401B_493001807509893120/5d092dc074a6a22c14d911d85c7e0cd7.jpg?imageMogr2/',
   ];
+}
+
+/// 医生详情页图片资源
+class _DoctorDetailPage {
+  final hospitalLogo = 'https://cdn-icons-png.flaticon.com/512/4320/4320371.png';
+  final medicalLogo = 'https://cdn-icons-png.flaticon.com/512/4320/4320372.png';
+  final doctorIcon = 'https://cdn-icons-png.flaticon.com/512/3774/3774299.png';
+  final doctorAvatar = 'https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg';
 }

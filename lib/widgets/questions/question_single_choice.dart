@@ -104,7 +104,7 @@ class _QuestionSingleChoiceState extends State<QuestionSingleChoice> {
         ),
         child: Row(
           children: [
-            Flexible(
+            Expanded(
               child: Text(
                 choice.title,
                 style: TextStyle(
